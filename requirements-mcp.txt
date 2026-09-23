@@ -1,0 +1,5 @@
+# Install only in the dedicated .venv-mcp, which inherits the existing
+# application Python packages for Oracle/market-data service reuse. The local
+# MCP SDK packages override conflicting global packages without changing the
+# main Flask/FastAPI runtime.
+mcp[cli]==2.2.0

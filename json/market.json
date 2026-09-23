@@ -1,0 +1,51 @@
+{
+  "movers": {
+    "gainers": [
+      { "s": "INFY", "chg": 3.4 },
+      { "s": "TCS", "chg": 2.9 },
+      { "s": "HDFCBANK", "chg": 2.1 },
+      { "s": "RELIANCE", "chg": 1.8 },
+      { "s": "ICICIBANK", "chg": 1.6 }
+    ],
+    "losers": [
+      { "s": "ITC", "chg": -2.2 },
+      { "s": "HCLTECH", "chg": -1.9 },
+      { "s": "LT", "chg": -1.7 },
+      { "s": "SBIN", "chg": -1.3 },
+      { "s": "ONGC", "chg": -1.1 }
+    ],
+    "breadth": { "advances": 312, "declines": 171, "unchanged": 17 }
+  },
+  "screener": [
+    { "symbol": "SYM1",  "priceChange": 1.2,  "volumeShock": 1.1,  "high52": 120, "low52": 80,  "ath": 130, "high2y": 125, "high5y": 130, "volume": 1200000 },
+    { "symbol": "SYM2",  "priceChange": -0.5, "volumeShock": 0.8,  "high52": 220, "low52": 140, "ath": 230, "high2y": 228, "high5y": 230, "volume": 900000 },
+    { "symbol": "SYM3",  "priceChange": 2.3,  "volumeShock": 1.6,  "high52": 90,  "low52": 50,  "ath": 95,  "high2y": 95,  "high5y": 95,  "volume": 1500000 },
+    { "symbol": "SYM4",  "priceChange": -1.1, "volumeShock": 0.7,  "high52": 450, "low52": 280, "ath": 470, "high2y": 469, "high5y": 470, "volume": 760000 },
+    { "symbol": "SYM5",  "priceChange": 0.9,  "volumeShock": 1.9,  "high52": 310, "low52": 210, "ath": 315, "high2y": 313, "high5y": 315, "volume": 1300000 },
+    { "symbol": "SYM6",  "priceChange": -2.1, "volumeShock": 0.6,  "high52": 75,  "low52": 40,  "ath": 80,  "high2y": 80,  "high5y": 80,  "volume": 500000 },
+    { "symbol": "SYM7",  "priceChange": 3.8,  "volumeShock": 2.1,  "high52": 510, "low52": 330, "ath": 520, "high2y": 520, "high5y": 520, "volume": 2200000 },
+    { "symbol": "SYM8",  "priceChange": -0.2, "volumeShock": 1.0,  "high52": 140, "low52": 100, "ath": 150, "high2y": 148, "high5y": 150, "volume": 1100000 },
+    { "symbol": "SYM9",  "priceChange": 0.4,  "volumeShock": 1.3,  "high52": 260, "low52": 150, "ath": 270, "high2y": 268, "high5y": 270, "volume": 840000 },
+    { "symbol": "SYM10", "priceChange": 1.5,  "volumeShock": 1.1,  "high52": 620, "low52": 400, "ath": 650, "high2y": 645, "high5y": 650, "volume": 1950000 },
+    { "symbol": "SYM11", "priceChange": -0.9, "volumeShock": 0.9,  "high52": 190, "low52": 120, "ath": 195, "high2y": 195, "high5y": 195, "volume": 600000 },
+    { "symbol": "SYM12", "priceChange": 2.7,  "volumeShock": 2.3,  "high52": 330, "low52": 210, "ath": 340, "high2y": 339, "high5y": 340, "volume": 1700000 },
+    { "symbol": "SYM13", "priceChange": -1.4, "volumeShock": 0.7,  "high52": 85,  "low52": 55,  "ath": 90,  "high2y": 89,  "high5y": 90,  "volume": 420000 },
+    { "symbol": "SYM14", "priceChange": 0.6,  "volumeShock": 1.2,  "high52": 280, "low52": 190, "ath": 300, "high2y": 298, "high5y": 300, "volume": 990000 },
+    { "symbol": "SYM15", "priceChange": 1.0,  "volumeShock": 1.8,  "high52": 720, "low52": 470, "ath": 740, "high2y": 739, "high5y": 740, "volume": 2450000 },
+    { "symbol": "SYM16", "priceChange": -0.3, "volumeShock": 0.8,  "high52": 120, "low52": 80,  "ath": 130, "high2y": 128, "high5y": 130, "volume": 710000 },
+    { "symbol": "SYM17", "priceChange": 2.1,  "volumeShock": 1.4,  "high52": 250, "low52": 160, "ath": 260, "high2y": 258, "high5y": 260, "volume": 1030000 },
+    { "symbol": "SYM18", "priceChange": 0.2,  "volumeShock": 1.0,  "high52": 310, "low52": 205, "ath": 318, "high2y": 318, "high5y": 318, "volume": 870000 },
+    { "symbol": "SYM19", "priceChange": -1.8, "volumeShock": 0.6,  "high52": 95,  "low52": 60,  "ath": 100, "high2y": 100, "high5y": 100, "volume": 390000 },
+    { "symbol": "SYM20", "priceChange": 3.1,  "volumeShock": 2.4,  "high52": 410, "low52": 300, "ath": 420, "high2y": 419, "high5y": 420, "volume": 1990000 },
+    { "symbol": "SYM21", "priceChange": -0.7, "volumeShock": 0.9,  "high52": 155, "low52": 110, "ath": 160, "high2y": 160, "high5y": 160, "volume": 520000 },
+    { "symbol": "SYM22", "priceChange": 1.9,  "volumeShock": 1.5,  "high52": 205, "low52": 150, "ath": 215, "high2y": 214, "high5y": 215, "volume": 1140000 },
+    { "symbol": "SYM23", "priceChange": 0.1,  "volumeShock": 1.0,  "high52": 275, "low52": 195, "ath": 285, "high2y": 284, "high5y": 285, "volume": 780000 },
+    { "symbol": "SYM24", "priceChange": -1.2, "volumeShock": 0.7,  "high52": 340, "low52": 240, "ath": 350, "high2y": 349, "high5y": 350, "volume": 690000 },
+    { "symbol": "SYM25", "priceChange": 2.5,  "volumeShock": 2.0,  "high52": 460, "low52": 320, "ath": 470, "high2y": 470, "high5y": 470, "volume": 1600000 },
+    { "symbol": "SYM26", "priceChange": -0.4, "volumeShock": 0.9,  "high52": 180, "low52": 120, "ath": 190, "high2y": 189, "high5y": 190, "volume": 600000 },
+    { "symbol": "SYM27", "priceChange": 1.7,  "volumeShock": 1.2,  "high52": 520, "low52": 360, "ath": 530, "high2y": 529, "high5y": 530, "volume": 1420000 },
+    { "symbol": "SYM28", "priceChange": 0.8,  "volumeShock": 1.1,  "high52": 210, "low52": 150, "ath": 220, "high2y": 220, "high5y": 220, "volume": 960000 },
+    { "symbol": "SYM29", "priceChange": -0.6, "volumeShock": 0.8,  "high52": 130, "low52": 90,  "ath": 140, "high2y": 140, "high5y": 140, "volume": 510000 },
+    { "symbol": "SYM30", "priceChange": 2.0,  "volumeShock": 1.9,  "high52": 380, "low52": 260, "ath": 390, "high2y": 389, "high5y": 390, "volume": 1740000 }
+  ]
+}

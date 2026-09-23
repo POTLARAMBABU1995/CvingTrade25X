@@ -1,0 +1,220 @@
+CvingTrade25X MCP End-to-End Flow
+=================================
+
+1. OUTCOME AND FIXED BOUNDARIES
+
+CvingTrade25X exposes one vendor-neutral, read-only MCP adapter. It reuses the existing Python service owners and Oracle read paths. It does not create duplicate Flask APIs, a second OHLCV pipeline, arbitrary SQL access, brokerage actions, or order placement.
+
+Local MCP origin : http://127.0.0.1:1729/mcp
+Transport        : Stateless Streamable HTTP with JSON responses
+Optional local   : stdio
+Remote edge      : HTTPS tunnel or private reverse proxy to loopback
+Tools            : 16; all read-only and idempotent
+Oracle 1521      : Private; never tunneled
+SDK environment  : Isolated .venv-mcp using requirements-mcp.txt
+
+2. ARCHITECTURE
+
+Cloud MCP client
+  -> HTTPS public /mcp URL
+  -> Cloudflare Tunnel or approved reverse proxy
+  -> http://127.0.0.1:1729/mcp
+  -> HTTP security middleware
+  -> MCP protocol and authentication layer
+  -> per-tool scope and allow-list policy
+  -> MCP adapter validation and normalization
+  -> existing CvingTrade25X service owner
+  -> existing Oracle pool/read query
+  -> data-quality and deterministic analysis
+  -> bounded JSON MCP result
+  -> audit log and client response
+
+Local clients use stdio or the loopback HTTP endpoint and then enter the same MCP core. There is no ChatGPT-, Claude-, Gemini-, Grok-, or other vendor-specific tool branch.
+
+3. STARTUP FLOW
+
+1. scripts/import_mcp_local_env.ps1 imports allowed local MCP environment values; explicit process values win.
+2. scripts/start_remote_mcp.ps1 enforces port 1729, loopback origin, and authenticated remote mode.
+3. It starts backend.mcp_server.cli with streamable-http, host 127.0.0.1, port 1729, and path /mcp when no owned listener exists.
+4. cli.py loads and validates McpSettings, builds the server, and starts Uvicorn.
+5. server.py registers health routes and 16 tools.
+6. The local validator must pass before tunnel startup.
+7. When CVING_QUICK_TUNNEL_ENABLED=true, an owned cloudflared process targets only http://127.0.0.1:1729.
+8. The generated HTTPS URL is captured and remote DNS/TLS/auth/MCP/tool/health validation runs.
+9. Runtime state is stored under runtime/mcp; logs are under runtime/logs.
+
+4. BUILT-IN OAUTH 2.1 FLOW
+
+With CVING_MCP_AUTH_MODE=oauth-server:
+
+1. GET /.well-known/oauth-protected-resource/mcp
+2. GET authorization-server/OpenID discovery metadata
+3. POST /register for Dynamic Client Registration
+4. GET /authorize with a PKCE S256 challenge
+5. Owner completes /oauth/consent with the configured owner password
+6. Server redirects to the registered callback with a short-lived code
+7. POST /token with the code verifier
+8. Server returns access and refresh tokens
+9. Client calls /mcp with Authorization: Bearer <access-token>
+10. Client performs initialize, notifications/initialized, tools/list, and tools/call
+
+Other supported authentication modes:
+- bearer: constant-time comparison with a configured 32-plus-character token.
+- oauth: external OAuth/OIDC validation through an HTTPS RFC 7662 introspection endpoint.
+- none: loopback development only; remote profiles reject it except for the explicit short-lived public no-auth test mode.
+
+Cloudflare-proxied metadata is dynamically rewritten to the active public HTTPS hostname. Local metadata remains loopback-based. Quick Tunnel hostnames are temporary and must never be hardcoded.
+
+5. ONE TOOL CALL, END TO END
+
+1. Client sends tools/call to /mcp.
+2. Security middleware checks Host and Origin, establishes a safe identity, and enforces rate, concurrency, request-size, and response-size limits.
+3. The MCP SDK authenticates the token and negotiates the protocol.
+4. authorize_tool verifies the tool allow list and required read scope.
+5. Pydantic annotations and the adapter validate and bound arguments.
+6. McpPriceActionService normalizes input and calls the existing service owner.
+7. The existing owner reads through the current Oracle pool/query path with timeouts and circuit breaking.
+8. OHLCV is sanitized, chronologically sorted, deduplicated, and data-quality checked.
+9. Existing deterministic technical utilities perform analysis.
+10. The bounded result contains data-quality/evidence fields where applicable and marks database values as data, not instructions.
+11. Known failures return clean structured errors; unexpected errors become INTERNAL_ERROR without leaking stack traces or credentials.
+12. Audit logs record request/tool/status/duration/protocol context without secrets.
+
+6. THE 16 TOOLS AND EXISTING OWNERS
+
+cving:admin:health
+- health_check -> backend.db_pool.pool Oracle health query
+- readiness_check -> health owner plus profile/auth readiness
+
+cving:market:read
+- list_symbols -> marketdata_service.list_symbols
+- get_symbol_info -> chart_service.fetch_ohlcv_payload
+- get_latest_price -> chart_service.fetch_ohlcv_payload
+- get_ohlcv -> existing /api/bars owner, chart_service.fetch_ohlcv_payload
+
+cving:analysis:read
+- get_swing_points -> technical_utils.detect_swing_pivots
+- get_market_structure -> existing swing primitives
+- get_support_resistance -> technical_utils.calculate_support_resistance
+- get_price_zones -> existing support/resistance owner
+- get_breakout_status -> technical_utils.detect_resistance_breakout
+- get_momentum -> existing OHLCV source and deterministic price/volume calculation
+- analyze_symbol -> existing chart and technical services
+- analyze_multi_timeframe -> existing daily data and weekly/monthly aggregation
+- explain_level -> existing OHLCV, swing, and support/resistance owners
+
+cving:scan:read
+- scan_price_action -> price_action_service.fetch_price_action_page and the existing /api/technicals/price-action owner
+
+7. SECURITY AND DATA BOUNDARIES
+
+- Every tool is read-only; no write scopes exist.
+- No tool accepts SQL, shell commands, file paths, credentials, or order instructions.
+- Tool, exchange, symbol allow, and symbol deny policies can reduce access.
+- Bars, universe size, scan results, bytes, concurrency, duration, and DB call time are bounded.
+- Normal remote use keeps MCP bound to loopback and exposes only the HTTPS edge.
+- Remote profiles require authentication and HTTPS metadata.
+- Secrets belong in ignored local configuration or a secret store, never files, URLs, logs, or runtime metadata.
+- Oracle stays private behind the existing backend pool.
+- Results are evidence, not guaranteed outcomes or trading authority.
+
+8. RUNTIME FILES AND ENDPOINTS
+
+MCP endpoint          : http://127.0.0.1:1729/mcp
+Liveness              : http://127.0.0.1:1729/healthz
+Readiness             : http://127.0.0.1:1729/readyz
+Generated remote URL  : runtime/mcp/remote_mcp_url.txt
+Remote state          : runtime/mcp/remote_mcp.json
+Owned MCP PID         : runtime/mcp/mcp.pid
+Owned Cloudflare PID  : runtime/mcp/cloudflared.pid
+MCP logs              : runtime/logs/mcp_server.log and mcp_server.error.log
+Tunnel logs           : runtime/logs/cloudflared.log and related error log
+
+Saved remote metadata is not proof that a tunnel is currently running. Confirm the PID and run the remote validator before sharing the URL.
+
+9. WINDOWS POWERSHELL RUNBOOK
+
+One-time environment:
+
+  cd C:\Users\admin\Documents\CvingTrade25X\CvingTrade25X
+  cmd.exe /d /c scripts\setup_mcp_venv.cmd
+  cmd.exe /d /c scripts\validate_mcp.cmd
+
+Local MCP:
+
+  $env:CVING_MCP_PROFILE = 'local-http'
+  $env:CVING_MCP_AUTH_MODE = 'none'
+  cmd.exe /d /c scripts\run_mcp_http.cmd
+
+Authenticated remote MCP with built-in OAuth:
+
+  $env:CVING_MCP_PROFILE = 'secure-tunnel'
+  $env:CVING_MCP_AUTH_MODE = 'oauth-server'
+  $env:CVING_MCP_OAUTH_OWNER_PASSWORD = '<at-least-16-characters>'
+  $env:CVING_MCP_BEARER_TOKEN = '<optional-static-fallback-at-least-32-characters>'
+  $env:CVING_QUICK_TUNNEL_ENABLED = 'true'
+  cmd.exe /d /c scripts\start_remote_mcp.cmd
+
+Read the generated temporary URL:
+
+  Get-Content .\runtime\mcp\remote_mcp_url.txt
+
+Status and validation:
+
+  cmd.exe /d /c scripts\remote_mcp_status.cmd
+  .\.venv-mcp\Scripts\python.exe scripts\validate_local_mcp.py --url http://127.0.0.1:1729/mcp --auth-mode oauth-server --token-env CVING_MCP_BEARER_TOKEN
+  .\.venv-mcp\Scripts\python.exe scripts\test_remote_mcp.py
+  python -m pytest backend\tests\test_mcp_oauth_server.py backend\tests\test_mcp_http_security.py -q
+  python scripts\scan_api_duplicates.py
+
+The remote validator, not a saved URL or process creation alone, is the remote readiness gate.
+
+Safe shutdown:
+
+  cmd.exe /d /c scripts\stop_remote_mcp.cmd
+  cmd.exe /d /c scripts\stop_remote_mcp.cmd --all
+
+The first command stops only the owned tunnel. The --all command also stops the owned MCP process. Do not use a broad port-based kill against an unverified process.
+
+10. OBSERVED RUNTIME SNAPSHOT (2026-09-21)
+
+Local MCP       : UP
+Port            : 1729
+Transport       : Streamable HTTP
+Authentication  : OAUTH-SERVER
+Oracle          : READY
+MCP tools       : 16
+Cloudflare      : STOPPED
+Saved metadata  : Last remote validation says PASS, but it is historical while Cloudflare is stopped
+
+The local MCP is usable on loopback. Restart and revalidate the tunnel before treating a saved trycloudflare.com URL as active.
+
+11. TROUBLESHOOTING
+
+401: Complete OAuth or supply the configured bearer token. Never put tokens in the URL.
+403: Check the Origin or same-origin tunnel hostname.
+421: Correct Host/allowed-host configuration or a stale tunnel hostname.
+429: Wait for the one-minute rate window or adjust approved policy.
+503 capacity: Retry after the stated delay and inspect concurrent clients.
+503 readiness: Inspect Oracle/backend readiness and runtime/logs/mcp_server.error.log.
+Saved URL with stopped tunnel: Start remote MCP and rerun the remote validator.
+SEC_E_NO_CREDENTIALS from curl.exe: Use the repository Python validators.
+Tunnel restarted: Reread runtime/mcp/remote_mcp_url.txt.
+
+12. VALIDATION CHECKLIST
+
+[ ] /healthz is OK.
+[ ] /readyz reports Oracle ready.
+[ ] MCP initialize succeeds.
+[ ] tools/list returns exactly 16 read-only tools.
+[ ] Missing and invalid credentials fail closed.
+[ ] Host and Origin rejection checks pass.
+[ ] OAuth discovery, DCR, PKCE, consent, and token exchange pass.
+[ ] A bounded sample tool returns data-quality/evidence without secrets.
+[ ] Remote DNS, TLS, auth, initialize, tools, health, limits, and secret checks pass.
+[ ] Duplicate API scan reports no exact duplicate API.
+[ ] Shutdown removes only recorded owned processes.
+
+13. ROLLBACK
+
+This is documentation-only. Remove docs/MCP_END_TO_END_FLOW.md and docs/MCP_END_TO_END_FLOW.txt, then restore CHANGELOG.md from runtime/backups/2026-09-21_183214_2026-09-21-mcp-flow-docs/CHANGELOG.md.

@@ -1,0 +1,52 @@
+﻿-- Validate tablespaces for Strategy Agent and NSE Market Cap objects.
+
+SELECT owner, table_name, tablespace_name
+FROM dba_tables
+WHERE owner = 'SYSTEM'
+  AND table_name IN (
+    'CVING_STRATEGY_PARAMS',
+    'CVING_STRATEGY_AGENT_RUNS',
+    'CVING_STRATEGY_AGENT_BACKTESTS',
+    'CVING_NSE_MARKET_CAP_HIST',
+    'CVING_NSE_MCAP_PIPELINE_RUNS'
+  )
+ORDER BY table_name;
+
+SELECT table_name, index_name, tablespace_name, status
+FROM dba_indexes
+WHERE table_owner = 'SYSTEM'
+  AND table_name IN (
+    'CVING_STRATEGY_PARAMS',
+    'CVING_STRATEGY_AGENT_RUNS',
+    'CVING_STRATEGY_AGENT_BACKTESTS',
+    'CVING_NSE_MARKET_CAP_HIST',
+    'CVING_NSE_MCAP_PIPELINE_RUNS'
+  )
+ORDER BY table_name, index_name;
+
+SELECT table_name, column_name, tablespace_name
+FROM dba_lobs
+WHERE owner = 'SYSTEM'
+  AND table_name IN (
+    'CVING_STRATEGY_AGENT_RUNS',
+    'CVING_NSE_MARKET_CAP_HIST',
+    'CVING_NSE_MCAP_PIPELINE_RUNS'
+  )
+ORDER BY table_name, column_name;
+
+SELECT tablespace_name, ROUND(SUM(bytes) / 1024 / 1024, 2) AS free_mb
+FROM dba_free_space
+WHERE tablespace_name IN ('SYSTEM', 'CVING_APP')
+GROUP BY tablespace_name
+ORDER BY tablespace_name;
+
+SELECT 'CVING_STRATEGY_PARAMS' AS table_name, COUNT(*) AS row_count FROM SYSTEM.CVING_STRATEGY_PARAMS
+UNION ALL
+SELECT 'CVING_STRATEGY_AGENT_RUNS', COUNT(*) FROM SYSTEM.CVING_STRATEGY_AGENT_RUNS
+UNION ALL
+SELECT 'CVING_STRATEGY_AGENT_BACKTESTS', COUNT(*) FROM SYSTEM.CVING_STRATEGY_AGENT_BACKTESTS
+UNION ALL
+SELECT 'CVING_NSE_MARKET_CAP_HIST', COUNT(*) FROM SYSTEM.CVING_NSE_MARKET_CAP_HIST
+UNION ALL
+SELECT 'CVING_NSE_MCAP_PIPELINE_RUNS', COUNT(*) FROM SYSTEM.CVING_NSE_MCAP_PIPELINE_RUNS;
+

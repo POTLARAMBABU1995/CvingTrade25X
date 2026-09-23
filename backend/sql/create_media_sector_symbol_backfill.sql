@@ -1,0 +1,155 @@
+PROMPT Backfilling explicit Media symbols into staging and sector-map tables (idempotent, no duplicates).
+SET DEFINE OFF;
+
+DECLARE
+  v_sector_value VARCHAR2(100) := 'Media Entertainment & Publication';
+BEGIN
+  MERGE INTO NSE_NIFTY_MEDIA_STAGING tgt
+  USING (
+    SELECT 'ZEEL' AS symbol FROM dual UNION ALL
+    SELECT 'NETWORK18' FROM dual UNION ALL
+    SELECT 'SAREGAMA' FROM dual UNION ALL
+    SELECT 'TIPSMUSIC' FROM dual UNION ALL
+    SELECT 'NAZARA' FROM dual UNION ALL
+    SELECT 'AQYLON' FROM dual UNION ALL
+    SELECT 'SUNTV' FROM dual UNION ALL
+    SELECT 'PFOCUS' FROM dual UNION ALL
+    SELECT 'PVRINOX' FROM dual UNION ALL
+    SELECT 'HATHWAY' FROM dual UNION ALL
+    SELECT 'NDTV' FROM dual UNION ALL
+    SELECT 'ZEEMEDIA' FROM dual UNION ALL
+    SELECT 'DEN' FROM dual UNION ALL
+    SELECT 'DISHTV' FROM dual UNION ALL
+    SELECT 'SIGNPOST' FROM dual UNION ALL
+    SELECT 'BALAJITELE' FROM dual UNION ALL
+    SELECT 'TVTODAY' FROM dual UNION ALL
+    SELECT 'ENIL' FROM dual UNION ALL
+    SELECT 'ONMOBILE' FROM dual UNION ALL
+    SELECT 'RKSWAMY' FROM dual UNION ALL
+    SELECT 'GTPL' FROM dual UNION ALL
+    SELECT 'DBCORP' FROM dual
+  ) src
+  ON (UPPER(TRIM(tgt.SYMBOL)) = src.symbol)
+  WHEN NOT MATCHED THEN
+    INSERT (SYMBOL, SECTOR)
+    VALUES (src.symbol, v_sector_value);
+END;
+/
+
+DECLARE
+  v_proc_exists NUMBER := 0;
+  PROCEDURE sync_sector_map_manual IS
+  BEGIN
+    MERGE INTO NSE_SYMBOL_SECTOR_MAP tgt
+    USING (
+      SELECT 'ZEEL' AS symbol FROM dual UNION ALL
+      SELECT 'NETWORK18' FROM dual UNION ALL
+      SELECT 'SAREGAMA' FROM dual UNION ALL
+      SELECT 'TIPSMUSIC' FROM dual UNION ALL
+      SELECT 'NAZARA' FROM dual UNION ALL
+      SELECT 'AQYLON' FROM dual UNION ALL
+      SELECT 'SUNTV' FROM dual UNION ALL
+      SELECT 'PFOCUS' FROM dual UNION ALL
+      SELECT 'PVRINOX' FROM dual UNION ALL
+      SELECT 'HATHWAY' FROM dual UNION ALL
+      SELECT 'NDTV' FROM dual UNION ALL
+      SELECT 'ZEEMEDIA' FROM dual UNION ALL
+      SELECT 'DEN' FROM dual UNION ALL
+      SELECT 'DISHTV' FROM dual UNION ALL
+      SELECT 'SIGNPOST' FROM dual UNION ALL
+      SELECT 'BALAJITELE' FROM dual UNION ALL
+      SELECT 'TVTODAY' FROM dual UNION ALL
+      SELECT 'ENIL' FROM dual UNION ALL
+      SELECT 'ONMOBILE' FROM dual UNION ALL
+      SELECT 'RKSWAMY' FROM dual UNION ALL
+      SELECT 'GTPL' FROM dual UNION ALL
+      SELECT 'DBCORP' FROM dual
+    ) src
+    ON (UPPER(TRIM(tgt.SYMBOL)) = src.symbol)
+    WHEN NOT MATCHED THEN
+      INSERT (SYMBOL, SECTOR_CODE)
+      VALUES (src.symbol, 'MEDIA');
+  END sync_sector_map_manual;
+BEGIN
+  SELECT COUNT(*)
+    INTO v_proc_exists
+    FROM user_objects
+   WHERE object_name = 'PR_SYNC_NSE_SYMBOL_SECTOR_MAP_FROM_STAGING'
+     AND object_type = 'PROCEDURE';
+
+  IF v_proc_exists > 0 THEN
+    BEGIN
+      PR_SYNC_NSE_SYMBOL_SECTOR_MAP_FROM_STAGING;
+    EXCEPTION
+      WHEN OTHERS THEN
+        sync_sector_map_manual;
+    END;
+  ELSE
+    sync_sector_map_manual;
+  END IF;
+END;
+/
+
+COMMIT;
+
+PROMPT Validation - media staging rows:
+SELECT
+  UPPER(TRIM(SYMBOL)) AS SYMBOL,
+  SECTOR
+FROM NSE_NIFTY_MEDIA_STAGING
+WHERE UPPER(TRIM(SYMBOL)) IN (
+  'ZEEL',
+  'NETWORK18',
+  'SAREGAMA',
+  'TIPSMUSIC',
+  'NAZARA',
+  'AQYLON',
+  'SUNTV',
+  'PFOCUS',
+  'PVRINOX',
+  'HATHWAY',
+  'NDTV',
+  'ZEEMEDIA',
+  'DEN',
+  'DISHTV',
+  'SIGNPOST',
+  'BALAJITELE',
+  'TVTODAY',
+  'ENIL',
+  'ONMOBILE',
+  'RKSWAMY',
+  'GTPL',
+  'DBCORP'
+)
+ORDER BY 1;
+
+PROMPT Validation - sector map rows:
+SELECT
+  UPPER(TRIM(SYMBOL)) AS SYMBOL,
+  SECTOR_CODE
+FROM NSE_SYMBOL_SECTOR_MAP
+WHERE UPPER(TRIM(SYMBOL)) IN (
+  'ZEEL',
+  'NETWORK18',
+  'SAREGAMA',
+  'TIPSMUSIC',
+  'NAZARA',
+  'AQYLON',
+  'SUNTV',
+  'PFOCUS',
+  'PVRINOX',
+  'HATHWAY',
+  'NDTV',
+  'ZEEMEDIA',
+  'DEN',
+  'DISHTV',
+  'SIGNPOST',
+  'BALAJITELE',
+  'TVTODAY',
+  'ENIL',
+  'ONMOBILE',
+  'RKSWAMY',
+  'GTPL',
+  'DBCORP'
+)
+ORDER BY 1;

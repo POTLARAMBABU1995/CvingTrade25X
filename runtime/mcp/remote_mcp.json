@@ -1,0 +1,16 @@
+﻿{
+    "provider":  "cloudflare",
+    "type":  "quick",
+    "base_url":  "https://caroline-prediction-anything-thinks.trycloudflare.com",
+    "mcp_url":  "https://caroline-prediction-anything-thinks.trycloudflare.com/mcp",
+    "created_at":  "2026-09-21T03:14:11.3375912+00:00",
+    "local_origin":  "http://127.0.0.1:1729",
+    "temporary":  true,
+    "active":  true,
+    "pid":  13788,
+    "cloudflared_path":  "C:\\Program Files (x86)\\cloudflared\\cloudflared.exe",
+    "cloudflared_version":  "cloudflared version 2026.9.1 (built 2026-09-10T13:52 UTC)",
+    "authentication":  "oauth-server",
+    "remote_validation":  "PASS",
+    "tool_count":  16
+}

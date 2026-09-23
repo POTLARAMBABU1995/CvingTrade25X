@@ -1,0 +1,9 @@
+SET DEFINE OFF
+SET SERVEROUTPUT ON SIZE UNLIMITED
+SET FEEDBACK ON
+SET ECHO OFF
+SET TERMOUT ON
+WHENEVER SQLERROR EXIT FAILURE ROLLBACK
+CONNECT CVING_APP/"Rambabu@1260"@//127.0.0.1:1521/cvingpdb.local
+@C:\Users\admin\Documents\CvingTrade25X\CvingTrade25X\db\migration\_generated\procedure_procedure_calculate_trade_book_PROCEDURE_CALCULATE_TRADE_BOOK_DDL.sql
+EXIT

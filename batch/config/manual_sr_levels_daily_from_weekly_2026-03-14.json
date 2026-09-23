@@ -1,0 +1,43 @@
+{
+  "records": [
+    {
+      "symbol": "AARTIIND",
+      "tf": "1D",
+      "as_of_date": "2026-03-14",
+      "source": "manual_image_weekly_chart",
+      "level_type": "MANUAL",
+      "exchange": "NSE",
+      "chart_provider": "TradingView",
+      "accuracy_estimate": 0.95,
+      "notes": "Extracted from weekly chart labels, stored as daily SR points only.",
+      "source_timeframe": "1W",
+      "sr_levels": [1011.45, 866.25, 772.60, 662.30, 599.75, 541.15, 491.00, 412.45, 371.85, 338.60, 287.95, 219.15, 174.00, 121.33, 63.63]
+    },
+    {
+      "symbol": "360ONE",
+      "tf": "1D",
+      "as_of_date": "2026-03-14",
+      "source": "manual_image_weekly_chart",
+      "level_type": "MANUAL",
+      "exchange": "NSE",
+      "chart_provider": "TradingView",
+      "accuracy_estimate": 0.95,
+      "notes": "Extracted from weekly chart labels, stored as daily SR points only.",
+      "source_timeframe": "1W",
+      "sr_levels": [1319.80, 1231.85, 1107.60, 1061.15, 983.00, 924.00, 785.40, 716.20, 600.45, 477.85, 397.25, 311.65, 205.67]
+    },
+    {
+      "symbol": "TANLA",
+      "tf": "1D",
+      "as_of_date": "2026-03-14",
+      "source": "manual_image_weekly_chart",
+      "level_type": "MANUAL",
+      "exchange": "NSE",
+      "chart_provider": "TradingView",
+      "accuracy_estimate": 0.95,
+      "notes": "Extracted from weekly chart labels, stored as daily SR points only.",
+      "source_timeframe": "1W",
+      "sr_levels": [1306.75, 1245.60, 1102.05, 966.30, 802.45, 660.00, 528.40, 409.65]
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+SP2-0341: 
+line overflow during variable substitution (>3000 characters at line 1)

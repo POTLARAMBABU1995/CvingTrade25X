@@ -1,0 +1,75 @@
+﻿{
+  "taxonomy_version": "manual-sr-annotation-v1",
+  "target_timeframe": "1D",
+  "fields": {
+    "analysis.trend_direction": [
+      "uptrend",
+      "downtrend",
+      "sideways",
+      "range-bound",
+      "transition"
+    ],
+    "analysis.market_phase": [
+      "accumulation",
+      "markup",
+      "distribution",
+      "markdown",
+      "consolidation",
+      "breakout",
+      "breakdown",
+      "pullback"
+    ],
+    "analysis.price_action_state": [
+      "higher-highs",
+      "higher-lows",
+      "lower-highs",
+      "lower-lows",
+      "base-building",
+      "compression",
+      "expansion",
+      "mean-reverting",
+      "volatile",
+      "gap-driven"
+    ],
+    "analysis.chart_patterns": [
+      "ascending-triangle",
+      "descending-triangle",
+      "symmetrical-triangle",
+      "ascending-channel",
+      "descending-channel",
+      "rectangle",
+      "flag",
+      "pennant",
+      "wedge",
+      "double-top",
+      "double-bottom",
+      "head-and-shoulders",
+      "inverse-head-and-shoulders",
+      "cup-and-handle",
+      "rounding-bottom",
+      "rounding-top",
+      "bullish-engulfing-zone",
+      "bearish-engulfing-zone"
+    ],
+    "analysis.pattern_bias": [
+      "bullish",
+      "bearish",
+      "neutral"
+    ],
+    "analysis.entry_bias": [
+      "buy-dips",
+      "sell-rallies",
+      "breakout-buy",
+      "breakdown-sell",
+      "wait"
+    ]
+  },
+  "guidance": {
+    "purpose": "Use the same controlled labels across manual SR chart annotations so the generated dataset is reusable for retrieval, analytics, and later supervised model training.",
+    "notes": [
+      "Store SR levels only in sr_levels. Support or resistance role should be inferred later from CMP.",
+      "Keep tf as 1D even when the source chart is 1W or 1M. Preserve source_timeframe for context.",
+      "Use multiple values for price_action_state and chart_patterns when needed, but keep labels from this taxonomy whenever possible."
+    ]
+  }
+}

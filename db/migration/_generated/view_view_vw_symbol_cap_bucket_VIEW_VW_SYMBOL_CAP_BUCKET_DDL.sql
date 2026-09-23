@@ -1,0 +1,10 @@
+--------------------------------------------------------
+--  Backup generated - 2026-03-29 15:57:39
+--------------------------------------------------------
+--  Source owner: SYSTEM
+--  Source container: CDB$ROOT
+--  Source object type: VIEW
+--  Source object name: VW_SYMBOL_CAP_BUCKET
+
+CREATE OR REPLACE FORCE NONEDITIONABLE VIEW "VW_SYMBOL_CAP_BUCKET" ("SYMBOL", "CAP_BUCKET") AS
+  WITH cap_union AS (SELECT UPPER(TRIM(symbol)) AS symbol, 'LARGE' AS cap_bucket, 1 AS cap_rank FROM NSE_NIFTY50_LARGECAP WHERE symbol IS NOT NULL AND NVL(UPPER(TRIM(LARGE_INDEX)), 'N') = 'Y'  UNION ALL SELECT UPPER(TRIM(symbol)) AS symbol, 'MID' AS cap_bucket, 2 AS cap_rank FROM NSE_NIFTY50_LARGECAP WHERE symbol IS NOT NULL AND NVL(UPPER(TRIM(MID_INDEX)), 'N') = 'Y'  UNION ALL SELECT UPPER(TRIM(symbol)) AS symbol, 'SMALL' AS cap_bucket, 3 AS cap_rank FROM NSE_NIFTY50_LARGECAP WHERE symbol IS NOT NULL AND NVL(UPPER(TRIM(SMALL_INDEX)), 'N') = 'Y'  UNION ALL SELECT UPPER(TRIM(symbol)) AS symbol, 'LARGE' AS cap_bucket, 1 AS cap_rank FROM NSE_NIFTY150_MIDCAP WHERE symbol IS NOT NULL AND NVL(UPPER(TRIM(LARGE_INDEX)), 'N') = 'Y'  UNION ALL SELECT UPPER(TRIM(symbol)) AS symbol, 'MID' AS cap_bucket, 2 AS cap_rank FROM NSE_NIFTY150_MIDCAP WHERE symbol IS NOT NULL AND NVL(UPPER(TRIM(MID_INDEX)), 'N') = 'Y'  UNION ALL SELECT UPPER(TRIM(symbol)) AS symbol, 'SMALL' AS cap_bucket, 3 AS cap_rank FROM NSE_NIFTY150_MIDCAP WHERE symbol IS NOT NULL AND NVL(UPPER(TRIM(SMALL_INDEX)), 'N') = 'Y'  UNION ALL SELECT UPPER(TRIM(symbol)) AS symbol, 'LARGE' AS cap_bucket, 1 AS cap_rank FROM NSE_NIFTY250_SMALLCAP WHERE symbol IS NOT NULL AND NVL(UPPER(TRIM(LARGE_INDEX)), 'N') = 'Y'  UNION ALL SELECT UPPER(TRIM(symbol)) AS symbol, 'MID' AS cap_bucket, 2 AS cap_rank FROM NSE_NIFTY250_SMALLCAP WHERE symbol IS NOT NULL AND NVL(UPPER(TRIM(MID_INDEX)), 'N') = 'Y'  UNION ALL SELECT UPPER(TRIM(symbol)) AS symbol, 'SMALL' AS cap_bucket, 3 AS cap_rank FROM NSE_NIFTY250_SMALLCAP WHERE symbol IS NOT NULL AND NVL(UPPER(TRIM(SMALL_INDEX)), 'N') = 'Y' ) SELECT symbol, MIN(cap_bucket) KEEP (DENSE_RANK FIRST ORDER BY cap_rank) AS cap_bucket FROM cap_union GROUP BY symbol;

@@ -1,0 +1,51 @@
+{
+  "asOf": "04-10-2025",
+  "source": "embedded-snapshot",
+  "rows": [
+    {
+      "symbol": "RELIANCE",
+      "price": 2468.35,
+      "tradingDate": "04-10-2025",
+      "ltcDate": "03-10-2025",
+      "tradingDays": 128,
+      "rsi": 56.4,
+      "rsiScore": 62.1
+    },
+    {
+      "symbol": "HDFCBANK",
+      "price": 1587.1,
+      "tradingDate": "04-10-2025",
+      "ltcDate": "03-10-2025",
+      "tradingDays": 130,
+      "rsi": 54.9,
+      "rsiScore": 59.6
+    },
+    {
+      "symbol": "TCS",
+      "price": 3432.85,
+      "tradingDate": "04-10-2025",
+      "ltcDate": "03-10-2025",
+      "tradingDays": 127,
+      "rsi": 62.7,
+      "rsiScore": 68.5
+    },
+    {
+      "symbol": "INFY",
+      "price": 1512.55,
+      "tradingDate": "04-10-2025",
+      "ltcDate": "03-10-2025",
+      "tradingDays": 121,
+      "rsi": 58.8,
+      "rsiScore": 64.3
+    },
+    {
+      "symbol": "SBIN",
+      "price": 682.4,
+      "tradingDate": "04-10-2025",
+      "ltcDate": "03-10-2025",
+      "tradingDays": 119,
+      "rsi": 60.1,
+      "rsiScore": 66.8
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "required_objects": {
+    "TABLE": [
+      {
+        "name": "STOCK_EOD_HISTORY",
+        "exists": true
+      },
+      {
+        "name": "NSE_NIFTY500_DAILY_RAW_DATA_DEV",
+        "exists": true
+      },
+      {
+        "name": "NSE_NIFTY500_DAILY_RAW_DATA_ORACLE",
+        "exists": true
+      },
+      {
+        "name": "DIM_SYMBOLS",
+        "exists": true
+      },
+      {
+        "name": "FACT_OHLCV",
+        "exists": true
+      },
+      {
+        "name": "NSE_NIFTY50_LARGECAP",
+        "exists": true
+      },
+      {
+        "name": "NSE_NIFTY150_MIDCAP",
+        "exists": true
+      },
+      {
+        "name": "NSE_NIFTY250_SMALLCAP",
+        "exists": true
+      },
+      {
+        "name": "NSE_SECTOR_MASTER",
+        "exists": true
+      },
+      {
+        "name": "NSE_SYMBOL_SECTOR_MAP",
+        "exists": true
+      },
+      {
+        "name": "CVING_NSE_MARKET_CAP_HIST",
+        "exists": true
+      },
+      {
+        "name": "CVING_NSE_FFMC_HIST",
+        "exists": true
+      },
+      {
+        "name": "ASURA_BULLISH_TREND_STRATEGY_TESTING",
+        "exists": true
+      },
+      {
+        "name": "ASURA_SCAN_DAILY_FACT",
+        "exists": true
+      },
+      {
+        "name": "GAINERS_TOP25",
+        "exists": true
+      },
+      {
+        "name": "LOOSERS_TOP25",
+        "exists": true
+      },
+      {
+        "name": "VOLUME_MOVERS_TOP25",
+        "exists": true
+      },
+      {
+        "name": "CVING_STRATEGY_PARAMS",
+        "exists": true
+      },
+      {
+        "name": "CVING_STRATEGY_AGENT_RUNS",
+        "exists": true
+      },
+      {
+        "name": "CVING_STRATEGY_AGENT_BACKTESTS",
+        "exists": true
+      },
+      {
+        "name": "PRICE_ACTION_SR_LEVELS_MANUALLY",
+        "exists": true
+      },
+      {
+        "name": "REGISTRATIONS",
+        "exists": true
+      },
+      {
+        "name": "AUTH_SESSIONS",
+        "exists": true
+      },
+      {
+        "name": "AUTH_QUICK_MPIN",
+        "exists": true
+      },
+      {
+        "name": "LOGIN_ACTIVITY",
+        "exists": true
+      },
+      {
+        "name": "FYERS_HOLDINGS_IMPORTS",
+        "exists": true
+      },
+      {
+        "name": "FYERS_HOLDINGS_CURRENT",
+        "exists": true
+      },
+      {
+        "name": "FYERS_HOLDINGS_AUDIT",
+        "exists": true
+      }
+    ],
+    "VIEW": [
+      {
+        "name": "V_STOCK_EOD_HISTORY",
+        "exists": true
+      },
+      {
+        "name": "V_NSE500_EMA_DAILY",
+        "exists": true
+      },
+      {
+        "name": "V_NSE500_EMA_MONTHLY",
+        "exists": true
+      },
+      {
+        "name": "V_NSE500_EMA_YEARLY",
+        "exists": true
+      },
+      {
+        "name": "V_NSE_NIFTY50_LARGECAP_OHLCV",
+        "exists": true
+      },
+      {
+        "name": "V_NSE_NIFTY150_MIDCAP_OHLCV",
+        "exists": true
+      },
+      {
+        "name": "V_NSE_NIFTY250_SMALLCAP_OHLCV",
+        "exists": true
+      },
+      {
+        "name": "VW_SYMBOL_CAP_BUCKET",
+        "exists": true
+      },
+      {
+        "name": "VW_NSE_CANONICAL_SECTOR_STAGE",
+        "exists": true
+      },
+      {
+        "name": "V_ASURA_SCAN_LATEST",
+        "exists": true
+      }
+    ],
+    "PROCEDURE": [
+      {
+        "name": "PR_SYNC_DIM_SYMBOLS_FROM_DEV",
+        "exists": true
+      },
+      {
+        "name": "PR_MERGE_FACT_OHLCV_FROM_DEV",
+        "exists": true
+      },
+      {
+        "name": "PR_SYNC_FACT_OHLCV_FROM_DEV",
+        "exists": true
+      },
+      {
+        "name": "PR_SYNC_DIM_SYMBOLS_CAP_SEG_FROM_INDICES",
+        "exists": true
+      },
+      {
+        "name": "PR_SYNC_NSE_SYMBOL_SECTOR_MAP_FROM_STAGING",
+        "exists": true
+      },
+      {
+        "name": "PR_SYNC_SECTOR_REFERENCE_DATA",
+        "exists": true
+      }
+    ],
+    "PACKAGE": [
+      {
+        "name": "ST25X_ETL_PKG",
+        "exists": true
+      }
+    ],
+    "FUNCTION": [
+      {
+        "name": "NORMALIZE_SYMBOL",
+        "exists": true
+      }
+    ],
+    "TRIGGER": [
+      {
+        "name": "TRG_STOCK_EOD_HISTORY_NORM",
+        "exists": true
+      }
+    ],
+    "MATERIALIZED VIEW": [
+      {
+        "name": "MV_NSE_SECTOR_UI_SNAPSHOT",
+        "exists": true
+      }
+    ],
+    "SEQUENCE": [
+      {
+        "name": "ASURA_BTS_SEQ",
+        "exists": true
+      }
+    ]
+  },
+  "row_counts": {
+    "NSE_NIFTY500_DAILY_RAW_DATA_DEV": 2362192,
+    "NSE_NIFTY500_DAILY_RAW_DATA_ORACLE": 2362293,
+    "STOCK_EOD_HISTORY": 0,
+    "FACT_OHLCV": 2199959,
+    "DIM_SYMBOLS": 602,
+    "GAINERS_TOP25": 250,
+    "LOOSERS_TOP25": 255,
+    "VOLUME_MOVERS_TOP25": 0
+  },
+  "connection": {
+    "user": "CVING_APP",
+    "db_name": "CVINGPDB",
+    "con_name": "CVINGPDB",
+    "default_tablespace": "CVING_DATA",
+    "temporary_tablespace": "TEMP"
+  },
+  "invalid_objects": [],
+  "system_tablespace_segments": []
+}

@@ -1,0 +1,28 @@
+{
+  "records": [
+    {
+      "symbol": "ADANIPOWER",
+      "tf": "1D",
+      "as_of_date": "2026-03-13",
+      "source": "manual_image",
+      "level_type": "MANUAL",
+      "exchange": "NSE",
+      "chart_provider": "TradingView",
+      "accuracy_estimate": 0.95,
+      "notes": "Extracted from the provided Adani Power TradingView screenshot. Stored as flat SR points so future automation can decide support or resistance from CMP.",
+      "sr_levels": [
+        180.01,
+        150.67,
+        137.18,
+        124.05,
+        113.34,
+        96.57,
+        81.02,
+        57.37,
+        33.01,
+        15.39,
+        3.43
+      ]
+    }
+  ]
+}

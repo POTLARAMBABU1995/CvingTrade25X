@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "window_start": "17:00",
+  "window_end": "09:00",
+  "current_day_start_time": "17:00",
+  "previous_trade_date_retry_until_success": true,
+  "current_trade_date_retry_until_success": true,
+  "retry_minutes": 5,
+  "max_retry_hours_for_previous_pending": 72,
+  "modules": {
+    "mcap": true,
+    "ffmc": true,
+    "delivery": true
+  },
+  "refresh_ui_after_success": true,
+  "skip_if_rows_exist": true,
+  "min_rows_threshold": {
+    "mcap": 1,
+    "ffmc": 1,
+    "delivery": 1
+  }
+}

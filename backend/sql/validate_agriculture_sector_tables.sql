@@ -1,0 +1,158 @@
+PROMPT Validating Agriculture sector staging table
+SET DEFINE OFF;
+
+PROMPT [1] Table presence
+SELECT table_name
+FROM user_tables
+WHERE table_name IN (
+    'NSE_NIFTY_AGRICULTURE_STAGING'
+)
+ORDER BY table_name;
+
+PROMPT [2] Master code
+SELECT sector_code, sector_name, index_code, display_order
+FROM nse_sector_master
+WHERE sector_code = 'AGRICULTURE';
+
+PROMPT [3] Staging count
+SELECT 'NSE_NIFTY_AGRICULTURE_STAGING' AS table_name, COUNT(*) AS row_count
+FROM NSE_NIFTY_AGRICULTURE_STAGING;
+
+PROMPT [4] Duplicate symbol check
+SELECT symbol, COUNT(*) AS duplicate_count
+FROM NSE_NIFTY_AGRICULTURE_STAGING
+GROUP BY symbol
+HAVING COUNT(*) > 1;
+
+PROMPT [5] Cross-sector duplicate symbol check
+WITH other_sector_tables AS (
+    SELECT DISTINCT utc.table_name
+    FROM user_tab_columns utc
+    WHERE utc.column_name = 'SYMBOL'
+      AND utc.table_name LIKE 'NSE\_NIFTY\_%\_STAGING' ESCAPE '\'
+      AND utc.table_name <> 'NSE_NIFTY_AGRICULTURE_STAGING'
+),
+cross_sector_hits AS (
+    SELECT 'NSE_NIFTY_AUTO_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_AUTO_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_AUTO_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_CHEMICALS_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_CHEMICALS_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_CHEMICALS_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_FIN_SERV_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_FIN_SERV_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_FIN_SERV_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_FMCG_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_FMCG_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_FMCG_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_HEALTHCARE_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_HEALTHCARE_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_HEALTHCARE_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_IT_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_IT_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_IT_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_MEDIA_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_MEDIA_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_MEDIA_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_METAL_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_METAL_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_METAL_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_PHARMA_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_PHARMA_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_PHARMA_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_PRIVATE_BANK_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_PRIVATE_BANK_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_PRIVATE_BANK_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_PSU_BANK_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_PSU_BANK_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_PSU_BANK_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_REALTY_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_REALTY_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_REALTY_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_CONSUMER_DURABLES_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_CONSUMER_DURABLES_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_CONSUMER_DURABLES_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_OIL_GAS_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_OIL_GAS_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_OIL_GAS_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_CAPITAL_GOODS_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_CAPITAL_GOODS_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_CAPITAL_GOODS_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_CONSTRUCTION_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_CONSTRUCTION_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_CONSTRUCTION_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_POWER_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_POWER_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_POWER_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_SERVICES_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_SERVICES_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_SERVICES_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_TELECOM_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_TELECOM_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_TELECOM_STAGING')
+    UNION ALL
+    SELECT 'NSE_NIFTY_UTILITIES_STAGING' AS table_name, UPPER(TRIM(a.symbol)) AS symbol
+    FROM NSE_NIFTY_AGRICULTURE_STAGING a
+    JOIN NSE_NIFTY_UTILITIES_STAGING t
+      ON UPPER(TRIM(t.symbol)) = UPPER(TRIM(a.symbol))
+    WHERE EXISTS (SELECT 1 FROM other_sector_tables WHERE table_name = 'NSE_NIFTY_UTILITIES_STAGING')
+)
+SELECT table_name, symbol
+FROM cross_sector_hits
+ORDER BY symbol, table_name;

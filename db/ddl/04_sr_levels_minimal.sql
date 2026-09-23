@@ -1,0 +1,95 @@
+﻿-- 04_sr_levels_minimal.sql
+-- Simplify SR_LEVELS to the minimal structure requested by the user.
+-- Final columns: LEVEL_ID, SYMBOL, TF, LEVEL_TYPE, CREATED_AT, UPDATED_AT, SR_LEVEL
+-- Date display preference for SQL tools:
+ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-RR HH.MI.SS AM';
+
+PROMPT Simplifying SR_LEVELS table...
+
+BEGIN
+  FOR cons IN (
+    SELECT constraint_name
+    FROM user_constraints
+    WHERE table_name = 'SR_LEVELS'
+      AND constraint_name = 'CK_SR_LEVELS_JSON'
+  ) LOOP
+    EXECUTE IMMEDIATE 'ALTER TABLE SR_LEVELS DROP CONSTRAINT ' || cons.constraint_name;
+  END LOOP;
+END;
+/
+
+BEGIN
+  FOR col IN (
+    SELECT column_name
+    FROM user_tab_columns
+    WHERE table_name = 'SR_LEVELS'
+      AND column_name IN ('PRICE_LOW', 'PRICE_HIGH', 'STRENGTH', 'TOUCHES', 'LAST_TOUCH_DATE', 'META_JSON')
+  ) LOOP
+    EXECUTE IMMEDIATE 'ALTER TABLE SR_LEVELS DROP COLUMN ' || col.column_name;
+  END LOOP;
+END;
+/
+
+BEGIN
+  FOR col IN (
+    SELECT column_name
+    FROM user_tab_columns
+    WHERE table_name = 'SR_LEVELS'
+      AND column_name = 'SR_LEVELS'
+  ) LOOP
+    EXECUTE IMMEDIATE 'ALTER TABLE SR_LEVELS RENAME COLUMN SR_LEVELS TO SR_LEVEL';
+  END LOOP;
+END;
+/
+
+ALTER TABLE SR_LEVELS MODIFY (
+  SR_LEVEL NUMBER(18,6) NOT NULL,
+  CREATED_AT DATE DEFAULT SYSDATE NOT NULL,
+  UPDATED_AT DATE DEFAULT SYSDATE NOT NULL
+);
+
+BEGIN
+  EXECUTE IMMEDIATE 'DROP INDEX IDX_SR_SYMBOL_TF_LEVEL';
+EXCEPTION
+  WHEN OTHERS THEN
+    IF SQLCODE != -1418 THEN
+      RAISE;
+    END IF;
+END;
+/
+
+CREATE INDEX IDX_SR_SYMBOL_TF_LEVEL ON SR_LEVELS (SYMBOL, TF, SR_LEVEL);
+
+PROMPT Validation
+SELECT column_name, data_type, data_default, nullable
+FROM user_tab_columns
+WHERE table_name = 'SR_LEVELS'
+ORDER BY column_id;
+
+ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-RR HH.MI.SS AM';
+
+SELECT LEVEL_ID,
+       SYMBOL,
+       TF,
+       LEVEL_TYPE,
+       SR_LEVEL,
+       CREATED_AT,
+       UPDATED_AT
+FROM SR_LEVELS
+ORDER BY SYMBOL, SR_LEVEL DESC;
+
+-- Rollback (structural only; dropped band/meta columns cannot be restored automatically)
+-- ALTER TABLE SR_LEVELS ADD (
+--   PRICE_LOW NUMBER(18,6) NOT NULL,
+--   PRICE_HIGH NUMBER(18,6) NOT NULL,
+--   STRENGTH NUMBER(10,4),
+--   TOUCHES NUMBER(6),
+--   LAST_TOUCH_DATE DATE,
+--   META_JSON CLOB
+-- );
+-- UPDATE SR_LEVELS SET PRICE_LOW = SR_LEVEL, PRICE_HIGH = SR_LEVEL;
+-- ALTER TABLE SR_LEVELS MODIFY (
+--   CREATED_AT TIMESTAMP DEFAULT SYSTIMESTAMP,
+--   UPDATED_AT TIMESTAMP DEFAULT SYSTIMESTAMP
+-- );
+-- ALTER TABLE SR_LEVELS ADD CONSTRAINT CK_SR_LEVELS_JSON CHECK (META_JSON IS JSON OR META_JSON IS NULL);

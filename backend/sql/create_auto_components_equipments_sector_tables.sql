@@ -1,0 +1,344 @@
+PROMPT Creating Auto Components & Equipments sector staging table
+WHENEVER OSERROR EXIT FAILURE ROLLBACK
+WHENEVER SQLERROR EXIT SQL.SQLCODE ROLLBACK
+SET DEFINE OFF;
+
+PROMPT [1/3] Validate cross-sector ownership before any DML ...
+
+DECLARE
+    l_symbol_in_clause  VARCHAR2(4000) := '''ACGL'',''ALICON'',''AMARAJABAT'',''APOLLOTYRE'',''ARE&M'',''ASAHIINDIA'',''ASAL'',''ASKAUTOLTD'',''AUTOAXLES'',''BALKRISIND'',''BANCOINDIA'',''BELRISE'',''BHARATFORG'',''BHARATSE'',''BOSCHLTD'',''CARRARO'',''CEATLTD'',''CIEINDIA'',''CRAFTSMAN'',''DIVGIITTS'',''ENDURANCE'',''ENKEIWHEL'',''EXIDEIND'',''FIEMIND'',''FMGOETZE'',''FRONTSP'',''GABRIEL'',''GNA'',''GOODYEAR'',''HAPPYFORGE'',''HINDCOMPOS'',''HITECHGEAR'',''IGARASHI'',''IMPAL'',''INDNIPPON'',''JAMNAAUTO'',''JAYBARMARU'',''JBMA'',''JKTYRE'',''JTEKTINDIA'',''KINETICENG'',''KROSS'',''LGBBROSLTD'',''LGBROSLTD'',''LUMAXIND'',''LUMAXTECH'',''MANDEEP'',''MENONBE'',''MINDACORP'',''MMFL'',''MOTHERSON'',''MRF'',''MSUMI'',''MUNJALAU'',''MUNJALSHOW'',''NDRAUTO'',''NELCAST'',''NRBBEARING'',''OBSCP'',''OMAXAUTO'',''PAVNAIND'',''PPAP'',''PRADPME'',''PRECAM'',''PRECISION'',''PRICOLLTD'',''PRITIKAUTO'',''RACLGEAR'',''RAJRATAN'',''RBL'',''REMSONSIND'',''RICOAUTO'',''RKFORGE'',''RML'',''ROLEXRINGS'',''SANDHAR'',''SANSERA'',''SCHAEFFLER'',''SEDEMAC'',''SEKURITIND'',''SHARDAMOTR'',''SHRIPISTON'',''SJS'',''SKFINDIA'',''SONACOMS'',''SSWL'',''STERTOOLS'',''STUDDS'',''SUBROS'',''SUNCLAY'',''SUNDRMBRAK'',''SUNDRMFAST'',''SUPRAJIT'',''TALBROAUTO'',''TENNIND'',''TIINDIA'',''TIMKEN'',''TOLINS'',''TVSSRICHAK'',''UNIPARTS'',''UNOMINDA'',''VARROC'',''VELJAN'',''WHEELS'',''ZFCVINDIA'',''ZFSTEERING''';
+    l_table_conflicts      NUMBER := 0;
+    l_sector_map_conflicts NUMBER := 0;
+    l_conflict_symbols     VARCHAR2(4000);
+BEGIN
+    FOR r IN (
+        SELECT t.table_name
+          FROM user_tables t
+          JOIN user_tab_columns c
+            ON c.table_name = t.table_name
+           AND c.column_name = 'SYMBOL'
+         WHERE t.table_name LIKE 'NSE_NIFTY%STAGING'
+           AND t.table_name NOT IN ('NSE_NIFTY_AUTO_COMPONENTS_EQUIPMENTS_STAGING')
+         ORDER BY t.table_name
+    ) LOOP
+        EXECUTE IMMEDIATE
+            'SELECT COUNT(*) FROM ' || r.table_name || ' WHERE UPPER(TRIM(symbol)) IN (' || l_symbol_in_clause || ')'
+            INTO l_table_conflicts;
+
+        IF l_table_conflicts > 0 THEN
+            EXECUTE IMMEDIATE
+                'SELECT LISTAGG(symbol, '', '') WITHIN GROUP (ORDER BY symbol) ' ||
+                'FROM (SELECT DISTINCT UPPER(TRIM(symbol)) AS symbol ' ||
+                '      FROM ' || r.table_name || ' ' ||
+                '      WHERE UPPER(TRIM(symbol)) IN (' || l_symbol_in_clause || '))'
+                INTO l_conflict_symbols;
+
+            RAISE_APPLICATION_ERROR(
+                -20071,
+                'Auto Components & Equipments symbols already exist in ' || r.table_name || ': ' || SUBSTR(NVL(l_conflict_symbols, 'UNKNOWN'), 1, 3000)
+            );
+        END IF;
+    END LOOP;
+
+    EXECUTE IMMEDIATE
+        'SELECT COUNT(*) FROM NSE_SYMBOL_SECTOR_MAP WHERE UPPER(TRIM(SYMBOL)) IN (' || l_symbol_in_clause || ') AND NVL(UPPER(TRIM(SECTOR_CODE)), ''~'') NOT IN (''~'', ''AUTO_COMPONENTS_EQUIPMENTS'')'
+        INTO l_sector_map_conflicts;
+
+    IF l_sector_map_conflicts > 0 THEN
+        EXECUTE IMMEDIATE
+            'SELECT LISTAGG(symbol || '':'' || sector_code, '', '') WITHIN GROUP (ORDER BY symbol) ' ||
+            'FROM (SELECT DISTINCT UPPER(TRIM(SYMBOL)) AS symbol, UPPER(TRIM(SECTOR_CODE)) AS sector_code ' ||
+            '      FROM NSE_SYMBOL_SECTOR_MAP ' ||
+            '      WHERE UPPER(TRIM(SYMBOL)) IN (' || l_symbol_in_clause || ') ' ||
+            '        AND NVL(UPPER(TRIM(SECTOR_CODE)), ''~'') NOT IN (''~'', ''AUTO_COMPONENTS_EQUIPMENTS''))'
+            INTO l_conflict_symbols;
+
+        RAISE_APPLICATION_ERROR(
+            -20072,
+            'Auto Components & Equipments symbols already map to another sector in NSE_SYMBOL_SECTOR_MAP: ' || SUBSTR(NVL(l_conflict_symbols, 'UNKNOWN'), 1, 3000)
+        );
+    END IF;
+END;
+/
+
+PROMPT [2/3] Create staging objects only after validation passes ...
+DECLARE
+    l_count NUMBER := 0;
+BEGIN
+    SELECT COUNT(*)
+      INTO l_count
+      FROM user_tables
+     WHERE table_name = 'NSE_NIFTY_AUTO_COMPONENTS_EQUIPMENTS_STAGING';
+
+    IF l_count = 0 THEN
+        EXECUTE IMMEDIATE 'CREATE TABLE NSE_NIFTY_AUTO_COMPONENTS_EQUIPMENTS_STAGING AS SELECT * FROM NSE_NIFTY_AUTO_STAGING WHERE 1 = 0';
+    END IF;
+
+    SELECT COUNT(*)
+      INTO l_count
+      FROM user_indexes
+     WHERE index_name = 'UK_NIFTY_AUTO_COMP_EQ_SYM';
+
+    IF l_count = 0 THEN
+        EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX UK_NIFTY_AUTO_COMP_EQ_SYM ON NSE_NIFTY_AUTO_COMPONENTS_EQUIPMENTS_STAGING (SYMBOL)';
+    END IF;
+END;
+/
+
+PROMPT [3/3] Merge sector master and staging records ...
+
+MERGE INTO NSE_SECTOR_MASTER tgt
+USING (
+    SELECT
+        'AUTO_COMPONENTS_EQUIPMENTS' AS sector_code,
+        'Auto Components & Equipments' AS sector_name,
+        'NIFTY_AUTO_COMPONENTS_EQUIPMENTS' AS index_code,
+        45 AS display_order
+    FROM dual
+) src
+ON (tgt.sector_code = src.sector_code)
+WHEN MATCHED THEN UPDATE SET
+    tgt.sector_name = src.sector_name,
+    tgt.index_code = src.index_code,
+    tgt.display_order = NVL(tgt.display_order, src.display_order)
+WHEN NOT MATCHED THEN
+    INSERT (sector_code, sector_name, index_code, display_order)
+    VALUES (src.sector_code, src.sector_name, src.index_code, src.display_order);
+
+MERGE INTO NSE_NIFTY_AUTO_COMPONENTS_EQUIPMENTS_STAGING tgt
+USING (
+    SELECT 'ACGL' AS symbol, 'Auto Components & Equipments' AS sector FROM dual UNION ALL
+    SELECT 'ALICON', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'AMARAJABAT', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'APOLLOTYRE', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'ARE&M', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'ASAHIINDIA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'ASAL', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'ASKAUTOLTD', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'AUTOAXLES', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'BALKRISIND', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'BANCOINDIA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'BELRISE', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'BHARATFORG', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'BHARATSE', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'BOSCHLTD', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'CARRARO', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'CEATLTD', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'CIEINDIA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'CRAFTSMAN', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'DIVGIITTS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'ENDURANCE', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'ENKEIWHEL', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'EXIDEIND', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'FIEMIND', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'FMGOETZE', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'FRONTSP', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'GABRIEL', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'GNA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'GOODYEAR', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'HAPPYFORGE', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'HINDCOMPOS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'HITECHGEAR', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'IGARASHI', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'IMPAL', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'INDNIPPON', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'JAMNAAUTO', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'JAYBARMARU', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'JBMA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'JKTYRE', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'JTEKTINDIA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'KINETICENG', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'KROSS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'LGBBROSLTD', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'LGBROSLTD', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'LUMAXIND', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'LUMAXTECH', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'MANDEEP', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'MENONBE', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'MINDACORP', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'MMFL', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'MOTHERSON', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'MRF', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'MSUMI', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'MUNJALAU', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'MUNJALSHOW', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'NDRAUTO', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'NELCAST', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'NRBBEARING', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'OBSCP', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'OMAXAUTO', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'PAVNAIND', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'PPAP', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'PRADPME', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'PRECAM', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'PRECISION', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'PRICOLLTD', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'PRITIKAUTO', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'RACLGEAR', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'RAJRATAN', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'RBL', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'REMSONSIND', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'RICOAUTO', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'RKFORGE', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'RML', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'ROLEXRINGS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SANDHAR', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SANSERA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SCHAEFFLER', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SEDEMAC', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SEKURITIND', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SHARDAMOTR', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SHRIPISTON', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SJS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SKFINDIA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SONACOMS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SSWL', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'STERTOOLS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'STUDDS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SUBROS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SUNCLAY', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SUNDRMBRAK', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SUNDRMFAST', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'SUPRAJIT', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'TALBROAUTO', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'TENNIND', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'TIINDIA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'TIMKEN', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'TOLINS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'TVSSRICHAK', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'UNIPARTS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'UNOMINDA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'VARROC', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'VELJAN', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'WHEELS', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'ZFCVINDIA', 'Auto Components & Equipments' FROM dual UNION ALL
+    SELECT 'ZFSTEERING', 'Auto Components & Equipments' FROM dual
+) src
+ON (UPPER(TRIM(tgt.SYMBOL)) = src.symbol)
+WHEN MATCHED THEN UPDATE SET
+    tgt.SECTOR = src.sector
+WHERE NVL(UPPER(TRIM(tgt.SECTOR)), '~') <> UPPER(src.sector)
+WHEN NOT MATCHED THEN
+    INSERT (SYMBOL, SECTOR)
+    VALUES (src.symbol, src.sector);
+
+MERGE INTO NSE_SYMBOL_SECTOR_MAP tgt
+USING (
+    SELECT 'ACGL' AS symbol, 'AUTO_COMPONENTS_EQUIPMENTS' AS sector_code FROM dual UNION ALL
+    SELECT 'ALICON', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'AMARAJABAT', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'APOLLOTYRE', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'ARE&M', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'ASAHIINDIA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'ASAL', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'ASKAUTOLTD', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'AUTOAXLES', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'BALKRISIND', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'BANCOINDIA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'BELRISE', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'BHARATFORG', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'BHARATSE', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'BOSCHLTD', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'CARRARO', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'CEATLTD', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'CIEINDIA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'CRAFTSMAN', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'DIVGIITTS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'ENDURANCE', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'ENKEIWHEL', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'EXIDEIND', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'FIEMIND', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'FMGOETZE', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'FRONTSP', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'GABRIEL', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'GNA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'GOODYEAR', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'HAPPYFORGE', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'HINDCOMPOS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'HITECHGEAR', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'IGARASHI', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'IMPAL', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'INDNIPPON', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'JAMNAAUTO', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'JAYBARMARU', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'JBMA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'JKTYRE', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'JTEKTINDIA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'KINETICENG', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'KROSS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'LGBBROSLTD', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'LGBROSLTD', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'LUMAXIND', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'LUMAXTECH', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'MANDEEP', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'MENONBE', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'MINDACORP', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'MMFL', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'MOTHERSON', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'MRF', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'MSUMI', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'MUNJALAU', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'MUNJALSHOW', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'NDRAUTO', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'NELCAST', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'NRBBEARING', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'OBSCP', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'OMAXAUTO', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'PAVNAIND', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'PPAP', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'PRADPME', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'PRECAM', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'PRECISION', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'PRICOLLTD', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'PRITIKAUTO', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'RACLGEAR', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'RAJRATAN', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'RBL', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'REMSONSIND', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'RICOAUTO', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'RKFORGE', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'RML', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'ROLEXRINGS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SANDHAR', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SANSERA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SCHAEFFLER', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SEDEMAC', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SEKURITIND', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SHARDAMOTR', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SHRIPISTON', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SJS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SKFINDIA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SONACOMS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SSWL', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'STERTOOLS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'STUDDS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SUBROS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SUNCLAY', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SUNDRMBRAK', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SUNDRMFAST', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'SUPRAJIT', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'TALBROAUTO', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'TENNIND', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'TIINDIA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'TIMKEN', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'TOLINS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'TVSSRICHAK', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'UNIPARTS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'UNOMINDA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'VARROC', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'VELJAN', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'WHEELS', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'ZFCVINDIA', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual UNION ALL
+    SELECT 'ZFSTEERING', 'AUTO_COMPONENTS_EQUIPMENTS' FROM dual
+) src
+ON (UPPER(TRIM(tgt.SYMBOL)) = src.symbol)
+WHEN MATCHED THEN UPDATE SET
+    tgt.SECTOR_CODE = src.sector_code
+WHERE NVL(UPPER(TRIM(tgt.SECTOR_CODE)), '~') <> src.sector_code
+WHEN NOT MATCHED THEN
+    INSERT (SYMBOL, SECTOR_CODE)
+    VALUES (src.symbol, src.sector_code);
+
+COMMIT;
+
+PROMPT Auto Components & Equipments sector staging is ready.

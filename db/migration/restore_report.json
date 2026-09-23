@@ -1,0 +1,1472 @@
+{
+  "connection": {
+    "user": "CVING_APP",
+    "host": "127.0.0.1",
+    "port": "1521",
+    "service_name": "cvingpdb.local",
+    "dsn": "127.0.0.1:1521/cvingpdb.local"
+  },
+  "executed_sql": [
+    {
+      "stage": "custom-pre",
+      "path": "C:\\Users\\admin\\Documents\\CvingTrade25X\\CvingTrade25X\\db\\migration\\cving_app_runtime_pre.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "API_QUOTA_LOG",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\API_QUOTA_LOG_BKP\\API_QUOTA_LOG_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "ASURA_BULLISH_TREND_STRATEGY_TESTING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\ASURA_BULLISH_TREND_STRATEGY_TESTING_BKP\\ASURA_BULLISH_TREND_STRATEGY_TESTING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "ASURA_SCAN_DAILY_FACT",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\ASURA_SCAN_DAILY_FACT_BKP\\ASURA_SCAN_DAILY_FACT_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "ASURA_TRADE_BOOK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\ASURA_TRADE_BOOK_BKP\\ASURA_TRADE_BOOK_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "BHRAMHAPUTRA_TRADES",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\BHRAMHAPUTRA_TRADES_BKP\\BHRAMHAPUTRA_TRADES_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "BHRAMHASTRA_BACKTESTING_DATA",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\BHRAMHASTRA_BACKTESTING_DATA_BKP\\BHRAMHASTRA_BACKTESTING_DATA_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "BULLISH_BHRAMHAPUTRA",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\BULLISH_BHRAMHAPUTRA_BKP\\BULLISH_BHRAMHAPUTRA_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "CVING_NSE_DELIVERY_HIST",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_NSE_DELIVERY_HIST_BKP\\CVING_NSE_DELIVERY_HIST_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "CVING_NSE_FFMC_HIST",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_NSE_FFMC_HIST_BKP\\CVING_NSE_FFMC_HIST_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "CVING_NSE_FFMC_PIPELINE_RUNS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_NSE_FFMC_PIPELINE_RUNS_BKP\\CVING_NSE_FFMC_PIPELINE_RUNS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "CVING_NSE_MARKET_CAP_HIST",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_NSE_MARKET_CAP_HIST_BKP\\CVING_NSE_MARKET_CAP_HIST_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "CVING_NSE_MCAP_PIPELINE_RUNS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_NSE_MCAP_PIPELINE_RUNS_BKP\\CVING_NSE_MCAP_PIPELINE_RUNS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "CVING_STRATEGY_AGENT_BACKTESTS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_STRATEGY_AGENT_BACKTESTS_BKP\\CVING_STRATEGY_AGENT_BACKTESTS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "CVING_STRATEGY_AGENT_RUNS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_STRATEGY_AGENT_RUNS_BKP\\CVING_STRATEGY_AGENT_RUNS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "CVING_STRATEGY_PARAMS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_STRATEGY_PARAMS_BKP\\CVING_STRATEGY_PARAMS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "DIM_INDEX",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\DIM_INDEX_BKP\\DIM_INDEX_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "DIM_INDEX_MEMBERSHIP",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\DIM_INDEX_MEMBERSHIP_BKP\\DIM_INDEX_MEMBERSHIP_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "ETL_WATERMARK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\ETL_WATERMARK_BKP\\ETL_WATERMARK_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "FYRES",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\FYRES_BKP\\FYRES_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "FYRES_STOCK_TRADING_PNL_AFTER_CALCULATIONS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\FYRES_STOCK_TRADING_PNL_AFTER_CALCULATIONS_BKP\\FYRES_STOCK_TRADING_PNL_AFTER_CALCULATIONS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "FYRES_STOCK_TRADING_PNL_CALCULATIONS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\FYRES_STOCK_TRADING_PNL_CALCULATIONS_BKP\\FYRES_STOCK_TRADING_PNL_CALCULATIONS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "FYRES_TRADING_PNL",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\FYRES_TRADING_PNL_BKP\\FYRES_TRADING_PNL_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "LOAD_PROGRESS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\LOAD_PROGRESS_BKP\\LOAD_PROGRESS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "MARKET_MOVERS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\MARKET_MOVERS_BKP\\MARKET_MOVERS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "MARKET_SUMMARY",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\MARKET_SUMMARY_BKP\\MARKET_SUMMARY_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NIFTY150_SYMBOL_MASTER",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NIFTY150_SYMBOL_MASTER_BKP\\NIFTY150_SYMBOL_MASTER_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NIFTY500_MASTER",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NIFTY500_MASTER_BKP\\NIFTY500_MASTER_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NIFTY_INDEX_CONSTITUENTS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NIFTY_INDEX_CONSTITUENTS_BKP\\NIFTY_INDEX_CONSTITUENTS_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY150_MIDCAP",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY150_MIDCAP_BKP\\NSE_NIFTY150_MIDCAP_BKP_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY250_SMALLCAP",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY250_SMALLCAP_BKP\\NSE_NIFTY250_SMALLCAP_BKP_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY500_DAILY_RAW_DATA_DEV",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY500_DAILY_RAW_DATA_DEV_BKP\\NSE_NIFTY500_DAILY_RAW_DATA_DEV_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY500_DAILY_RAW_DATA_ORACLE",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY500_DAILY_RAW_DATA_ORACLE_BKP\\NSE_NIFTY500_DAILY_RAW_DATA_ORACLE_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY500_HEALTHCARE_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY500_HEALTHCARE_STAGING_BKP\\NSE_NIFTY500_HEALTHCARE_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY50_LARGECAP",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY50_LARGECAP_BKP\\NSE_NIFTY50_LARGECAP_BKP_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_500_EQUITY_SEGMENT",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_500_EQUITY_SEGMENT_BKP\\NSE_NIFTY_500_EQUITY_SEGMENT_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_500_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_500_STAGING_BKP\\NSE_NIFTY_500_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_AUTO_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_AUTO_STAGING_BKP\\NSE_NIFTY_AUTO_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_BANK_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_BANK_STAGING_BKP\\NSE_NIFTY_BANK_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_CHEMICALS_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_CHEMICALS_STAGING_BKP\\NSE_NIFTY_CHEMICALS_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_CONSUMER_DURABLES_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_CONSUMER_DURABLES_STAGING_BKP\\NSE_NIFTY_CONSUMER_DURABLES_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_ENERGY_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_ENERGY_STAGING_BKP\\NSE_NIFTY_ENERGY_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_FINANCIAL_SERVICES_25_50_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_FINANCIAL_SERVICES_25_50_STAGING_BKP\\NSE_NIFTY_FINANCIAL_SERVICES_25_50_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_FINANCIAL_SERVICES_EX_BANK_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_FINANCIAL_SERVICES_EX_BANK_STAGING_BKP\\NSE_NIFTY_FINANCIAL_SERVICES_EX_BANK_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_FINANCIAL_SERVICES_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_FINANCIAL_SERVICES_STAGING_BKP\\NSE_NIFTY_FINANCIAL_SERVICES_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_FMCG_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_FMCG_STAGING_BKP\\NSE_NIFTY_FMCG_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_HEALTHCARE_INDEX_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_HEALTHCARE_INDEX_STAGING_BKP\\NSE_NIFTY_HEALTHCARE_INDEX_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_IT_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_IT_STAGING_BKP\\NSE_NIFTY_IT_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_MEDIA_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_MEDIA_STAGING_BKP\\NSE_NIFTY_MEDIA_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_METAL_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_METAL_STAGING_BKP\\NSE_NIFTY_METAL_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_MIDSMALL_FINANCIAL_SERVICES_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_MIDSMALL_FINANCIAL_SERVICES_STAGING_BKP\\NSE_NIFTY_MIDSMALL_FINANCIAL_SERVICES_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_MIDSMALL_HEALTHCARE_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_MIDSMALL_HEALTHCARE_STAGING_BKP\\NSE_NIFTY_MIDSMALL_HEALTHCARE_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_MIDSMALL_IT_TELECOM_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_MIDSMALL_IT_TELECOM_STAGING_BKP\\NSE_NIFTY_MIDSMALL_IT_TELECOM_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_OIL_AND_GAS_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_OIL_AND_GAS_STAGING_BKP\\NSE_NIFTY_OIL_AND_GAS_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_PHARMA_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_PHARMA_STAGING_BKP\\NSE_NIFTY_PHARMA_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_PRIVATE_BANK_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_PRIVATE_BANK_STAGING_BKP\\NSE_NIFTY_PRIVATE_BANK_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_PSU_BANK_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_PSU_BANK_STAGING_BKP\\NSE_NIFTY_PSU_BANK_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_NIFTY_REALITY_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_REALITY_STAGING_BKP\\NSE_NIFTY_REALITY_STAGING_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_SECTOR_MASTER",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_SECTOR_MASTER_BKP\\NSE_SECTOR_MASTER_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_SYMBOL_INDICATORS_LATEST",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_SYMBOL_INDICATORS_LATEST_BKP\\NSE_SYMBOL_INDICATORS_LATEST_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "NSE_SYMBOL_SECTORMAP",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_SYMBOL_SECTORMAP_BKP\\NSE_SYMBOL_SECTORMAP_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "PRICE_ACTION_SR_LEVELS_MANUALLY",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PRICE_ACTION_SR_LEVELS_MANUALLY_BKP\\PRICE_ACTION_SR_LEVELS_MANUALLY_BKP_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "ST25X_SYNC_LOG",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\ST25X_SYNC_LOG_BKP\\ST25X_SYNC_LOG_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "STOCK_EOD_HISTORY",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\STOCK_EOD_HISTORY_BKP\\STOCK_EOD_HISTORY_DDL.sql"
+    },
+    {
+      "stage": "table-ddl",
+      "object": "STOCK_SYNC_CTRL",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\STOCK_SYNC_CTRL_BKP\\STOCK_SYNC_CTRL_DDL.sql"
+    },
+    {
+      "stage": "custom-post",
+      "path": "C:\\Users\\admin\\Documents\\CvingTrade25X\\CvingTrade25X\\db\\migration\\cving_app_runtime_post.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_NSE_NIFTY500_DAILY_RAW_DATA_VIEW",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_NSE_NIFTY500_DAILY_RAW_DATA_VIEW_BKP\\VIEW_NSE_NIFTY500_DAILY_RAW_DATA_VIEW_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_ASURA_SCAN_LATEST",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_ASURA_SCAN_LATEST_BKP\\VIEW_V_ASURA_SCAN_LATEST_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_MISSING_DATES",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_MISSING_DATES_BKP\\VIEW_V_MISSING_DATES_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_NSE500_DAILY_2Y",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_NSE500_DAILY_2Y_BKP\\VIEW_V_NSE500_DAILY_2Y_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_NSE500_DAILY_6M",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_NSE500_DAILY_6M_BKP\\VIEW_V_NSE500_DAILY_6M_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_NSE500_EMA_DAILY",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_NSE500_EMA_DAILY_BKP\\VIEW_V_NSE500_EMA_DAILY_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_NSE500_EMA_MONTHLY",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_NSE500_EMA_MONTHLY_BKP\\VIEW_V_NSE500_EMA_MONTHLY_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_NSE500_EMA_YEARLY",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_NSE500_EMA_YEARLY_BKP\\VIEW_V_NSE500_EMA_YEARLY_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_NSE500_WEEKLY_6M",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_NSE500_WEEKLY_6M_BKP\\VIEW_V_NSE500_WEEKLY_6M_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_NSE_NIFTY150_MIDCAP_OHLCV",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_NSE_NIFTY150_MIDCAP_OHLCV_BKP\\VIEW_V_NSE_NIFTY150_MIDCAP_OHLCV_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_NSE_NIFTY250_SMALLCAP_OHLCV",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_NSE_NIFTY250_SMALLCAP_OHLCV_BKP\\VIEW_V_NSE_NIFTY250_SMALLCAP_OHLCV_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_NSE_NIFTY50_LARGECAP_OHLCV",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_NSE_NIFTY50_LARGECAP_OHLCV_BKP\\VIEW_V_NSE_NIFTY50_LARGECAP_OHLCV_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_V_STOCK_EOD_HISTORY",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_V_STOCK_EOD_HISTORY_BKP\\VIEW_V_STOCK_EOD_HISTORY_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_CVING_NSE_DELIVERY_LATEST",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_CVING_NSE_DELIVERY_LATEST_BKP\\VIEW_VW_CVING_NSE_DELIVERY_LATEST_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_CVING_NSE_FFMC_LATEST",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_CVING_NSE_FFMC_LATEST_BKP\\VIEW_VW_CVING_NSE_FFMC_LATEST_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_CVING_NSE_MARKET_CAP_LATEST",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_CVING_NSE_MARKET_CAP_LATEST_BKP\\VIEW_VW_CVING_NSE_MARKET_CAP_LATEST_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_NSE_CANONICAL_SECTOR_STAGE",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_NSE_CANONICAL_SECTOR_STAGE_BKP\\VIEW_VW_NSE_CANONICAL_SECTOR_STAGE_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_AUTO",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_AUTO_BKP\\VIEW_VW_SECTOR_AUTO_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_BANK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_BANK_BKP\\VIEW_VW_SECTOR_BANK_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_CHEM",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_CHEM_BKP\\VIEW_VW_SECTOR_CHEM_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_CONS_DUR",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_CONS_DUR_BKP\\VIEW_VW_SECTOR_CONS_DUR_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_ENERGY",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_ENERGY_BKP\\VIEW_VW_SECTOR_ENERGY_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_FIN_25_50",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_FIN_25_50_BKP\\VIEW_VW_SECTOR_FIN_25_50_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_FIN_EX_BANK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_FIN_EX_BANK_BKP\\VIEW_VW_SECTOR_FIN_EX_BANK_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_FIN_SERV",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_FIN_SERV_BKP\\VIEW_VW_SECTOR_FIN_SERV_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_FMCG",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_FMCG_BKP\\VIEW_VW_SECTOR_FMCG_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_HEALTH",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_HEALTH_BKP\\VIEW_VW_SECTOR_HEALTH_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_IT",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_IT_BKP\\VIEW_VW_SECTOR_IT_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_MEDIA",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_MEDIA_BKP\\VIEW_VW_SECTOR_MEDIA_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_METAL",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_METAL_BKP\\VIEW_VW_SECTOR_METAL_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_MID_FIN",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_MID_FIN_BKP\\VIEW_VW_SECTOR_MID_FIN_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_MID_HEALTH",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_MID_HEALTH_BKP\\VIEW_VW_SECTOR_MID_HEALTH_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_MID_IT_TEL",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_MID_IT_TEL_BKP\\VIEW_VW_SECTOR_MID_IT_TEL_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_OIL_GAS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_OIL_GAS_BKP\\VIEW_VW_SECTOR_OIL_GAS_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_PHARMA",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_PHARMA_BKP\\VIEW_VW_SECTOR_PHARMA_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_PSU_BANK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_PSU_BANK_BKP\\VIEW_VW_SECTOR_PSU_BANK_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_PVT_BANK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_PVT_BANK_BKP\\VIEW_VW_SECTOR_PVT_BANK_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SECTOR_REALTY",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SECTOR_REALTY_BKP\\VIEW_VW_SECTOR_REALTY_DDL.sql"
+    },
+    {
+      "stage": "view-ddl",
+      "object": "VIEW_VW_SYMBOL_CAP_BUCKET",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\VIEW_VW_SYMBOL_CAP_BUCKET_BKP\\VIEW_VW_SYMBOL_CAP_BUCKET_DDL.sql"
+    },
+    {
+      "stage": "package-ddl",
+      "object": "PACKAGE_ST25X_ETL_PKG",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PACKAGE_ST25X_ETL_PKG_BKP\\PACKAGE_ST25X_ETL_PKG_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_CALCULATE_STOCK_PROFIT",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_CALCULATE_STOCK_PROFIT_BKP\\PROCEDURE_CALCULATE_STOCK_PROFIT_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_CALCULATE_TRADE_BOOK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_CALCULATE_TRADE_BOOK_BKP\\PROCEDURE_CALCULATE_TRADE_BOOK_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_MERGE_FROM_HISTORY_TO_RAW",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_MERGE_FROM_HISTORY_TO_RAW_BKP\\PROCEDURE_MERGE_FROM_HISTORY_TO_RAW_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_CLEAN_STOCK_DEV_DUPLICATES",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_CLEAN_STOCK_DEV_DUPLICATES_BKP\\PROCEDURE_PR_CLEAN_STOCK_DEV_DUPLICATES_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_DAILY_INCREMENTAL_LOAD",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_DAILY_INCREMENTAL_LOAD_BKP\\PROCEDURE_PR_DAILY_INCREMENTAL_LOAD_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_MERGE_FACT_OHLCV_FROM_DEV",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_MERGE_FACT_OHLCV_FROM_DEV_BKP\\PROCEDURE_PR_MERGE_FACT_OHLCV_FROM_DEV_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_SYNC_DIM_SYMBOLS_CAP_SEG_FROM_INDICES",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_SYNC_DIM_SYMBOLS_CAP_SEG_FROM_INDICES_BKP\\PROCEDURE_PR_SYNC_DIM_SYMBOLS_CAP_SEG_FROM_INDICES_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_SYNC_DIM_SYMBOLS_FROM_DEV",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_SYNC_DIM_SYMBOLS_FROM_DEV_BKP\\PROCEDURE_PR_SYNC_DIM_SYMBOLS_FROM_DEV_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_SYNC_FACT_OHLCV_FROM_DEV",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_SYNC_FACT_OHLCV_FROM_DEV_BKP\\PROCEDURE_PR_SYNC_FACT_OHLCV_FROM_DEV_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_SYNC_NSE_SYMBOL_SECTOR_MAP_FROM_STAGING",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_SYNC_NSE_SYMBOL_SECTOR_MAP_FROM_STAGING_BKP\\PROCEDURE_PR_SYNC_NSE_SYMBOL_SECTOR_MAP_FROM_STAGING_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_SYNC_SECTOR_REFERENCE_DATA",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_SYNC_SECTOR_REFERENCE_DATA_BKP\\PROCEDURE_PR_SYNC_SECTOR_REFERENCE_DATA_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_SYNC_STOCK_DEV_BIDIRECTIONAL",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_SYNC_STOCK_DEV_BIDIRECTIONAL_BKP\\PROCEDURE_PR_SYNC_STOCK_DEV_BIDIRECTIONAL_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_PR_SYNC_STOCK_NEW_ROWS",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_PR_SYNC_STOCK_NEW_ROWS_BKP\\PROCEDURE_PR_SYNC_STOCK_NEW_ROWS_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_ST25X_LOG_SYNC",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_ST25X_LOG_SYNC_BKP\\PROCEDURE_ST25X_LOG_SYNC_DDL.sql"
+    },
+    {
+      "stage": "procedure-ddl",
+      "object": "PROCEDURE_THREE_MASTER_TABLES_DAILY_DATA_INSERTION",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\PROCEDURE_THREE_MASTER_TABLES_DAILY_DATA_INSERTION_BKP\\PROCEDURE_THREE_MASTER_TABLES_DAILY_DATA_INSERTION_DDL.sql"
+    },
+    {
+      "stage": "repo-procedure",
+      "path": "C:\\Users\\admin\\Documents\\CvingTrade25X\\CvingTrade25X\\backend\\sql\\create_fact_ohlcv_sync_procedures.sql"
+    },
+    {
+      "stage": "repo-procedure",
+      "path": "C:\\Users\\admin\\Documents\\CvingTrade25X\\CvingTrade25X\\backend\\sql\\create_sector_reference_sync_procedures.sql"
+    },
+    {
+      "stage": "trigger-ddl",
+      "object": "TRIGGER_TRG_STOCK_EOD_HISTORY_NORM",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\TRIGGER_TRG_STOCK_EOD_HISTORY_NORM_BKP\\TRIGGER_TRG_STOCK_EOD_HISTORY_NORM_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_FFMC_PIPELINE_RUNS_START",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_FFMC_PIPELINE_RUNS_START_BKP\\INDEX_IDX_FFMC_PIPELINE_RUNS_START_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_FFMC_PIPELINE_RUNS_TRDRUN",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_FFMC_PIPELINE_RUNS_TRDRUN_BKP\\INDEX_IDX_FFMC_PIPELINE_RUNS_TRDRUN_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_MCAP_PIPELINE_RUNS_START",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_MCAP_PIPELINE_RUNS_START_BKP\\INDEX_IDX_MCAP_PIPELINE_RUNS_START_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_MCAP_PIPELINE_RUNS_TRDRUN",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_MCAP_PIPELINE_RUNS_TRDRUN_BKP\\INDEX_IDX_MCAP_PIPELINE_RUNS_TRDRUN_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_NIFTY500_MASTER_DATE",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_NIFTY500_MASTER_DATE_BKP\\INDEX_IDX_NIFTY500_MASTER_DATE_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_NIFTY500_MASTER_SYMBOL",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_NIFTY500_MASTER_SYMBOL_BKP\\INDEX_IDX_NIFTY500_MASTER_SYMBOL_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_SE_MARKET_CAP_HIST_SYMDATE",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_SE_MARKET_CAP_HIST_SYMDATE_BKP\\INDEX_IDX_SE_MARKET_CAP_HIST_SYMDATE_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_SE_MARKET_CAP_HIST_TRDSRC",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_SE_MARKET_CAP_HIST_TRDSRC_BKP\\INDEX_IDX_SE_MARKET_CAP_HIST_TRDSRC_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_VING_NSE_FFMC_HIST_SYMDATE",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_VING_NSE_FFMC_HIST_SYMDATE_BKP\\INDEX_IDX_VING_NSE_FFMC_HIST_SYMDATE_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_VING_NSE_FFMC_HIST_TRDSRC",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IDX_VING_NSE_FFMC_HIST_TRDSRC_BKP\\INDEX_IDX_VING_NSE_FFMC_HIST_TRDSRC_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IX_ASURA_TRADE_BOOK_BUY_DT",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IX_ASURA_TRADE_BOOK_BUY_DT_BKP\\INDEX_IX_ASURA_TRADE_BOOK_BUY_DT_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IX_INDEX_MEMBERSHIP_SYMBOL",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IX_INDEX_MEMBERSHIP_SYMBOL_BKP\\INDEX_IX_INDEX_MEMBERSHIP_SYMBOL_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IX_NIC_LOOKUP",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_IX_NIC_LOOKUP_BKP\\INDEX_IX_NIC_LOOKUP_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_AUTO_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_AUTO_PK_BKP\\INDEX_NSE_NIFTY_AUTO_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_BANK_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_BANK_PK_BKP\\INDEX_NSE_NIFTY_BANK_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_CHEMICALS_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_CHEMICALS_PK_BKP\\INDEX_NSE_NIFTY_CHEMICALS_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_CONS_DUR_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_CONS_DUR_PK_BKP\\INDEX_NSE_NIFTY_CONS_DUR_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_ENERGY_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_ENERGY_PK_BKP\\INDEX_NSE_NIFTY_ENERGY_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_FIN_25_50_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_FIN_25_50_PK_BKP\\INDEX_NSE_NIFTY_FIN_25_50_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_FIN_EX_BANK_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_FIN_EX_BANK_PK_BKP\\INDEX_NSE_NIFTY_FIN_EX_BANK_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_FIN_SERV_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_FIN_SERV_PK_BKP\\INDEX_NSE_NIFTY_FIN_SERV_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_FMCG_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_FMCG_PK_BKP\\INDEX_NSE_NIFTY_FMCG_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_NIFTY_HEALTH_PK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_NSE_NIFTY_HEALTH_PK_BKP\\INDEX_NSE_NIFTY_HEALTH_PK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_ASURA_BULLISH_TREND",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_PK_ASURA_BULLISH_TREND_BKP\\INDEX_PK_ASURA_BULLISH_TREND_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_ASURA_SCAN",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_PK_ASURA_SCAN_BKP\\INDEX_PK_ASURA_SCAN_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_ASURA_TRADE_BOOK",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_PK_ASURA_TRADE_BOOK_BKP\\INDEX_PK_ASURA_TRADE_BOOK_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_DIM_INDEX_MEMBERSHIP",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_PK_DIM_INDEX_MEMBERSHIP_BKP\\INDEX_PK_DIM_INDEX_MEMBERSHIP_DDL.sql"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_NIC",
+      "path": "E:\\DB_BACKUP_SAFETY\\EXPORT\\INDEX_PK_NIC_BKP\\INDEX_PK_NIC_DDL.sql"
+    },
+    {
+      "stage": "custom",
+      "path": "C:\\Users\\admin\\Documents\\CvingTrade25X\\CvingTrade25X\\backend\\sql\\create_fyers_holdings_tables.sql"
+    },
+    {
+      "stage": "storage-normalization",
+      "path": "C:\\Users\\admin\\Documents\\CvingTrade25X\\CvingTrade25X\\db\\migration\\cving_app_storage_normalization.sql"
+    }
+  ],
+  "loaded_tables": [
+    {
+      "source_object": "ASURA_SCAN_DAILY_FACT",
+      "target_table": "ASURA_SCAN_DAILY_FACT",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\ASURA_SCAN_DAILY_FACT_BKP\\ASURA_SCAN_DAILY_FACT_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "ASURA_TRADE_BOOK",
+      "target_table": "ASURA_TRADE_BOOK",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\ASURA_TRADE_BOOK_BKP\\ASURA_TRADE_BOOK_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "BHRAMHAPUTRA_TRADES",
+      "target_table": "BHRAMHAPUTRA_TRADES",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\BHRAMHAPUTRA_TRADES_BKP\\BHRAMHAPUTRA_TRADES_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "BHRAMHASTRA_BACKTESTING_DATA",
+      "target_table": "BHRAMHASTRA_BACKTESTING_DATA",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\BHRAMHASTRA_BACKTESTING_DATA_BKP\\BHRAMHASTRA_BACKTESTING_DATA_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "CVING_NSE_FFMC_PIPELINE_RUNS",
+      "target_table": "CVING_NSE_FFMC_PIPELINE_RUNS",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_NSE_FFMC_PIPELINE_RUNS_BKP\\CVING_NSE_FFMC_PIPELINE_RUNS_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "CVING_NSE_MCAP_PIPELINE_RUNS",
+      "target_table": "CVING_NSE_MCAP_PIPELINE_RUNS",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\CVING_NSE_MCAP_PIPELINE_RUNS_BKP\\CVING_NSE_MCAP_PIPELINE_RUNS_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "DIM_INDEX_MEMBERSHIP",
+      "target_table": "DIM_INDEX_MEMBERSHIP",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\DIM_INDEX_MEMBERSHIP_BKP\\DIM_INDEX_MEMBERSHIP_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "FYRES",
+      "target_table": "FYRES",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\FYRES_BKP\\FYRES_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "FYRES_STOCK_TRADING_PNL_CALCULATIONS",
+      "target_table": "FYRES_STOCK_TRADING_PNL_CALCULATIONS",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\FYRES_STOCK_TRADING_PNL_CALCULATIONS_BKP\\FYRES_STOCK_TRADING_PNL_CALCULATIONS_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "MARKET_MOVERS",
+      "target_table": "MARKET_MOVERS",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\MARKET_MOVERS_BKP\\MARKET_MOVERS_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "MARKET_SUMMARY",
+      "target_table": "MARKET_SUMMARY",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\MARKET_SUMMARY_BKP\\MARKET_SUMMARY_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "NIFTY150_SYMBOL_MASTER",
+      "target_table": "NIFTY150_SYMBOL_MASTER",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NIFTY150_SYMBOL_MASTER_BKP\\NIFTY150_SYMBOL_MASTER_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "NIFTY500_MASTER",
+      "target_table": "NIFTY500_MASTER",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NIFTY500_MASTER_BKP\\NIFTY500_MASTER_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "NSE_NIFTY_500_STAGING",
+      "target_table": "NSE_NIFTY_500_STAGING",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_500_STAGING_BKP\\NSE_NIFTY_500_STAGING_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "NSE_NIFTY_BANK_STAGING",
+      "target_table": "NSE_NIFTY_BANK_STAGING",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_BANK_STAGING_BKP\\NSE_NIFTY_BANK_STAGING_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "NSE_NIFTY_ENERGY_STAGING",
+      "target_table": "NSE_NIFTY_ENERGY_STAGING",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_ENERGY_STAGING_BKP\\NSE_NIFTY_ENERGY_STAGING_DATA_TABLE.ctl"
+    },
+    {
+      "source_object": "NSE_NIFTY_FINANCIAL_SERVICES_STAGING",
+      "target_table": "NSE_NIFTY_FINANCIAL_SERVICES_STAGING",
+      "row_count": 0,
+      "control_file": "E:\\DB_BACKUP_SAFETY\\EXPORT\\NSE_NIFTY_FINANCIAL_SERVICES_STAGING_BKP\\NSE_NIFTY_FINANCIAL_SERVICES_STAGING_DATA_TABLE.ctl"
+    }
+  ],
+  "skipped": [
+    {
+      "stage": "data-load",
+      "object": "API_QUOTA_LOG",
+      "reason": "target table API_QUOTA_LOG already has 5752 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "ASURA_BULLISH_TREND_STRATEGY_TESTING",
+      "reason": "target table ASURA_BULLISH_TREND_STRATEGY_TESTING already has 15 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "AUTH_QUICK_MPIN",
+      "reason": "target table AUTH_QUICK_MPIN already has 31 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "AUTH_SESSIONS",
+      "reason": "target table AUTH_SESSIONS already has 147 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "BULLISH_BHRAMHAPUTRA",
+      "reason": "target table BULLISH_BHRAMHAPUTRA already has 17 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "CVING_NSE_DELIVERY_HIST",
+      "reason": "target table CVING_NSE_DELIVERY_HIST already has 171321 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "CVING_NSE_FFMC_HIST",
+      "reason": "target table CVING_NSE_FFMC_HIST already has 15 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "CVING_NSE_MARKET_CAP_HIST",
+      "reason": "target table CVING_NSE_MARKET_CAP_HIST already has 24195 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "CVING_STRATEGY_AGENT_BACKTESTS",
+      "reason": "target table CVING_STRATEGY_AGENT_BACKTESTS already has 30208 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "CVING_STRATEGY_AGENT_RUNS",
+      "reason": "target table CVING_STRATEGY_AGENT_RUNS already has 7 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "CVING_STRATEGY_PARAMS",
+      "reason": "target table CVING_STRATEGY_PARAMS already has 141 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "DIM_INDEX",
+      "reason": "target table DIM_INDEX already has 4 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "DIM_SYMBOLS",
+      "reason": "target table DIM_SYMBOLS already has 602 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "ETL_WATERMARK",
+      "reason": "target table ETL_WATERMARK already has 1 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "FACT_OHLCV",
+      "reason": "target table FACT_OHLCV already has 2199959 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "FYRES_STOCK_TRADING_PNL_AFTER_CALCULATIONS",
+      "reason": "target table FYRES_STOCK_TRADING_PNL_AFTER_CALCULATIONS already has 180 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "FYRES_TRADING_PNL",
+      "reason": "target table FYRES_TRADING_PNL already has 180 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "GAINERS_TOP25",
+      "reason": "target table GAINERS_TOP25 already has 250 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "LOAD_PROGRESS",
+      "reason": "target table LOAD_PROGRESS already has 344 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "LOGIN_ACTIVITY",
+      "reason": "target table LOGIN_ACTIVITY already has 87 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "LOOSERS_TOP25",
+      "reason": "target table LOOSERS_TOP25 already has 255 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "MV_NIFTY50_DAILY_SNAP",
+      "reason": "target table MV_NIFTY50_DAILY_SNAP missing"
+    },
+    {
+      "stage": "data-load",
+      "object": "MV_NIFTY_MIDCAP150_DAILY_SNAP",
+      "reason": "target table MV_NIFTY_MIDCAP150_DAILY_SNAP missing"
+    },
+    {
+      "stage": "data-load",
+      "object": "MV_NIFTY_SMALLCAP250_DAILY_SNAP",
+      "reason": "target table MV_NIFTY_SMALLCAP250_DAILY_SNAP missing"
+    },
+    {
+      "stage": "data-load",
+      "object": "MV_NSE50_DAILY_6M",
+      "reason": "target table MV_NSE50_DAILY_6M missing"
+    },
+    {
+      "stage": "data-load",
+      "object": "MV_NSE_NIFTY500_EMA_BASE",
+      "reason": "target table MV_NSE_NIFTY500_EMA_BASE missing"
+    },
+    {
+      "stage": "data-load",
+      "object": "MV_NSE_SECTOR_UI_SNAPSHOT",
+      "reason": "target table MV_NSE_SECTOR_UI_SNAPSHOT_SRC already has 234 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NIFTY_INDEX_CONSTITUENTS",
+      "reason": "target table NIFTY_INDEX_CONSTITUENTS already has 50 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY150_MIDCAP",
+      "reason": "target table NSE_NIFTY150_MIDCAP already has 150 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY250_SMALLCAP",
+      "reason": "target table NSE_NIFTY250_SMALLCAP already has 250 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY500_DAILY_RAW_DATA_DEV",
+      "reason": "target table NSE_NIFTY500_DAILY_RAW_DATA_DEV already has 2362192 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY500_DAILY_RAW_DATA_ORACLE",
+      "reason": "target table NSE_NIFTY500_DAILY_RAW_DATA_ORACLE already has 2362293 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY500_HEALTHCARE_STAGING",
+      "reason": "target table NSE_NIFTY500_HEALTHCARE_STAGING already has 50 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY50_LARGECAP",
+      "reason": "target table NSE_NIFTY50_LARGECAP already has 50 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_500_EQUITY_SEGMENT",
+      "reason": "target table NSE_NIFTY_500_EQUITY_SEGMENT already has 4013 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_AUTO_STAGING",
+      "reason": "target table NSE_NIFTY_AUTO_STAGING already has 15 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_CHEMICALS_STAGING",
+      "reason": "target table NSE_NIFTY_CHEMICALS_STAGING already has 20 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_CONSUMER_DURABLES_STAGING",
+      "reason": "target table NSE_NIFTY_CONSUMER_DURABLES_STAGING already has 15 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_FINANCIAL_SERVICES_25_50_STAGING",
+      "reason": "target table NSE_NIFTY_FINANCIAL_SERVICES_25_50_STAGING already has 20 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_FINANCIAL_SERVICES_EX_BANK_STAGING",
+      "reason": "target table NSE_NIFTY_FINANCIAL_SERVICES_EX_BANK_STAGING already has 30 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_FMCG_STAGING",
+      "reason": "target table NSE_NIFTY_FMCG_STAGING already has 15 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_HEALTHCARE_INDEX_STAGING",
+      "reason": "target table NSE_NIFTY_HEALTHCARE_INDEX_STAGING already has 20 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_IT_STAGING",
+      "reason": "target table NSE_NIFTY_IT_STAGING already has 10 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_MEDIA_STAGING",
+      "reason": "target table NSE_NIFTY_MEDIA_STAGING already has 10 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_METAL_STAGING",
+      "reason": "target table NSE_NIFTY_METAL_STAGING already has 15 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_MIDSMALL_FINANCIAL_SERVICES_STAGING",
+      "reason": "target table NSE_NIFTY_MIDSMALL_FINANCIAL_SERVICES_STAGING already has 30 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_MIDSMALL_HEALTHCARE_STAGING",
+      "reason": "target table NSE_NIFTY_MIDSMALL_HEALTHCARE_STAGING already has 30 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_MIDSMALL_IT_TELECOM_STAGING",
+      "reason": "target table NSE_NIFTY_MIDSMALL_IT_TELECOM_STAGING already has 20 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_OIL_AND_GAS_STAGING",
+      "reason": "target table NSE_NIFTY_OIL_AND_GAS_STAGING already has 15 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_PHARMA_STAGING",
+      "reason": "target table NSE_NIFTY_PHARMA_STAGING already has 20 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_PRIVATE_BANK_STAGING",
+      "reason": "target table NSE_NIFTY_PRIVATE_BANK_STAGING already has 10 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_PSU_BANK_STAGING",
+      "reason": "target table NSE_NIFTY_PSU_BANK_STAGING already has 12 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_NIFTY_REALITY_STAGING",
+      "reason": "target table NSE_NIFTY_REALITY_STAGING already has 10 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_SECTOR_MASTER",
+      "reason": "target table NSE_SECTOR_MASTER already has 21 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_SYMBOL_INDICATORS_LATEST",
+      "reason": "target table NSE_SYMBOL_INDICATORS_LATEST already has 568 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "NSE_SYMBOL_SECTORMAP",
+      "reason": "target table NSE_SYMBOL_SECTORMAP missing"
+    },
+    {
+      "stage": "data-load",
+      "object": "PRICE_ACTION_SR_LEVELS_MANUALLY",
+      "reason": "target table PRICE_ACTION_SR_LEVELS_MANUALLY already has 3296 rows"
+    },
+    {
+      "stage": "data-load",
+      "object": "REGISTRATIONS",
+      "reason": "no control file"
+    },
+    {
+      "stage": "data-load",
+      "object": "ST25X_SYNC_LOG",
+      "reason": "no control file"
+    },
+    {
+      "stage": "data-load",
+      "object": "STOCK_EOD_HISTORY",
+      "reason": "no control file"
+    },
+    {
+      "stage": "data-load",
+      "object": "STOCK_SYNC_CTRL",
+      "reason": "no control file"
+    },
+    {
+      "stage": "trigger-ddl",
+      "object": "TRIGGER_TRG_USERS_BIU",
+      "reason": "target table USERS missing"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_BHRAMHAPUTRA_TRADES_PK",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_DIM_IDX_MEM_IX1",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_I_MLOG$_FACT_OHLCV",
+      "reason": "target table MLOG$_FACT_OHLCV not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_I_MLOG$_NSE_NIFTY500_DAILY_RAW_DATA_DEV",
+      "reason": "target table MLOG$_NSE_NIFTY500_DAILY_RAW_DATA_DEV not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_I_MLOG$_STOCK_EOD_HISTORY",
+      "reason": "target table MLOG$_STOCK_EOD_HISTORY not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_AUTH_QUICK_MPIN_EXPIRES",
+      "reason": "target table AUTH_QUICK_MPIN not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_AUTH_QUICK_MPIN_REG",
+      "reason": "target table AUTH_QUICK_MPIN not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_AUTH_SESSIONS_EXPIRES",
+      "reason": "target table AUTH_SESSIONS not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_AUTH_SESSIONS_REG",
+      "reason": "target table AUTH_SESSIONS not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_BHR_BUYDATE",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_BHR_STOCK",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_BHRAMHASTRA_BT_LTC_DATE",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_BHRAMHASTRA_BT_STATUS",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_GAINERS_DATE",
+      "reason": "target table GAINERS_TOP25 not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_GY_AGENT_BACKTESTS_RUN",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_GY_AGENT_BACKTESTS_STRAT",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_HIST_LOAD_TS",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_HIST_SYM_MONTH",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_HIST_SYM_WEEK",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_HIST_SYM_YEAR",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_LOGIN_ACTIVITY_USER",
+      "reason": "target table LOGIN_ACTIVITY not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_LOOSERS_DATE",
+      "reason": "target table LOOSERS_TOP25 not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_MV50_D6_SYM_DATE",
+      "reason": "target table MV_NSE50_DAILY_6M not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_MV_M150_DAILY_SYMBOL",
+      "reason": "target table MV_NIFTY_MIDCAP150_DAILY_SNAP not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_MV_N50_DAILY_SYMBOL",
+      "reason": "target table MV_NIFTY50_DAILY_SNAP not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_MV_S250_DAILY_SYMBOL",
+      "reason": "target table MV_NIFTY_SMALLCAP250_DAILY_SNAP not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_N150_SYMBOL",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_N500_TDATE",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_NG_STRATEGY_PARAMS_UPD",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_NSE500_SYM_MONTH",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_NSE500_SYM_WEEK",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_NSE500_SYM_YEAR",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_RAW_SYM_DATE",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_SR_SYMBOL_TF_LEVEL",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_STOCK_EOD_TRADE_DATE",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IDX_VOLUME_DATE",
+      "reason": "target table VOLUME_MOVERS_TOP25 not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IX_RAW_DATE",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_IX_SYMBOL_MAPPING_OLD",
+      "reason": "target table SYMBOL_MAPPING not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_SYM_IND_LATEST_IDX1",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_SYM_IND_LATEST_PK",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_SYM_SECTOR_IDX1",
+      "reason": "target table NSE_SYMBOL_SECTOR_MAP not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_NSE_SYM_SECTOR_PK",
+      "reason": "target table NSE_SYMBOL_SECTOR_MAP not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_ACT_TYPE",
+      "reason": "target table ACT_TYPES not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_ACTNO",
+      "reason": "target table CUST_ACT_DTLS not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_CNO",
+      "reason": "target table CUST_DTLS not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_COMP_CODE",
+      "reason": "target table COMP_DTLS not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_DEPT",
+      "reason": "target table DEPT not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_EMP",
+      "reason": "target table EMP not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_FACT_OHLCV",
+      "reason": "target table FACT_OHLCV not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_NIFTY250_SYMBOL",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_NSE_NIFTY500",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_SR_LEVELS",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_STOCK_EOD_HISTORY",
+      "reason": "duplicate or equivalent index/constraint"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_TRREFERENCENO",
+      "reason": "target table BATCH_DETAILS_STAGE not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_USERS",
+      "reason": "target table USERS not eligible"
+    },
+    {
+      "stage": "index-ddl",
+      "object": "INDEX_PK_VING_STRATEGY_PARAMS",
+      "reason": "duplicate or equivalent index/constraint"
+    }
+  ],
+  "errors": []
+}

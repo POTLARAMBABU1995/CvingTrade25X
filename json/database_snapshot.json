@@ -1,0 +1,259 @@
+{
+  "generated": "2025-01-10T08:00:00Z",
+  "symbols": [
+    { "symbol": "INFY", "latest_trade_date": "2025-01-10" },
+    { "symbol": "TCS", "latest_trade_date": "2025-01-09" },
+    { "symbol": "RELIANCE", "latest_trade_date": "2025-01-11" },
+    { "symbol": "HDFCBANK", "latest_trade_date": "2025-01-08" },
+    { "symbol": "ICICIBANK", "latest_trade_date": "2025-01-07" }
+  ],
+  "summaries": {
+    "INFY": {
+      "stock": "INFY",
+      "latest_trade_date": "2025-01-10",
+      "daily": 320,
+      "weekly": 65,
+      "monthly": 15,
+      "yearly": 5,
+      "total_no_of_trading_days": 680
+    },
+    "TCS": {
+      "stock": "TCS",
+      "latest_trade_date": "2025-01-09",
+      "daily": 315,
+      "weekly": 63,
+      "monthly": 15,
+      "yearly": 5,
+      "total_no_of_trading_days": 670
+    },
+    "RELIANCE": {
+      "stock": "RELIANCE",
+      "latest_trade_date": "2025-01-11",
+      "daily": 340,
+      "weekly": 70,
+      "monthly": 16,
+      "yearly": 5,
+      "total_no_of_trading_days": 720
+    },
+    "HDFCBANK": {
+      "stock": "HDFCBANK",
+      "latest_trade_date": "2025-01-08",
+      "daily": 300,
+      "weekly": 60,
+      "monthly": 13,
+      "yearly": 4,
+      "total_no_of_trading_days": 640
+    },
+    "ICICIBANK": {
+      "stock": "ICICIBANK",
+      "latest_trade_date": "2025-01-07",
+      "daily": 310,
+      "weekly": 62,
+      "monthly": 14,
+      "yearly": 5,
+      "total_no_of_trading_days": 660
+    }
+  },
+  "coverage": {
+    "INFY": {
+      "daily": [
+        {
+          "stock": "INFY",
+          "latest_trade_date": "2025-01-10",
+          "daily": 320,
+          "weekly": 65,
+          "monthly": 15,
+          "yearly": 5,
+          "total_no_of_trading_days": 680
+        }
+      ],
+      "weekly": [
+        {
+          "stock": "INFY",
+          "latest_trade_date": "2025-01-10",
+          "weekly": 65,
+          "monthly": 15,
+          "yearly": 5,
+          "total_no_of_trading_days": 680
+        }
+      ],
+      "monthly": [
+        {
+          "stock": "INFY",
+          "latest_trade_date": "2025-01-10",
+          "monthly": 15,
+          "yearly": 5,
+          "total_no_of_trading_days": 680
+        }
+      ],
+      "yearly": [
+        {
+          "stock": "INFY",
+          "latest_trade_date": "2025-01-10",
+          "yearly": 5,
+          "total_no_of_trading_days": 680
+        }
+      ]
+    },
+    "TCS": {
+      "daily": [
+        {
+          "stock": "TCS",
+          "latest_trade_date": "2025-01-09",
+          "daily": 315,
+          "weekly": 63,
+          "monthly": 15,
+          "yearly": 5,
+          "total_no_of_trading_days": 670
+        }
+      ],
+      "weekly": [
+        {
+          "stock": "TCS",
+          "latest_trade_date": "2025-01-09",
+          "weekly": 63,
+          "monthly": 15,
+          "yearly": 5,
+          "total_no_of_trading_days": 670
+        }
+      ],
+      "monthly": [
+        {
+          "stock": "TCS",
+          "latest_trade_date": "2025-01-09",
+          "monthly": 15,
+          "yearly": 5,
+          "total_no_of_trading_days": 670
+        }
+      ],
+      "yearly": [
+        {
+          "stock": "TCS",
+          "latest_trade_date": "2025-01-09",
+          "yearly": 5,
+          "total_no_of_trading_days": 670
+        }
+      ]
+    },
+    "RELIANCE": {
+      "daily": [
+        {
+          "stock": "RELIANCE",
+          "latest_trade_date": "2025-01-11",
+          "daily": 340,
+          "weekly": 70,
+          "monthly": 16,
+          "yearly": 5,
+          "total_no_of_trading_days": 720
+        }
+      ],
+      "weekly": [
+        {
+          "stock": "RELIANCE",
+          "latest_trade_date": "2025-01-11",
+          "weekly": 70,
+          "monthly": 16,
+          "yearly": 5,
+          "total_no_of_trading_days": 720
+        }
+      ],
+      "monthly": [
+        {
+          "stock": "RELIANCE",
+          "latest_trade_date": "2025-01-11",
+          "monthly": 16,
+          "yearly": 5,
+          "total_no_of_trading_days": 720
+        }
+      ],
+      "yearly": [
+        {
+          "stock": "RELIANCE",
+          "latest_trade_date": "2025-01-11",
+          "yearly": 5,
+          "total_no_of_trading_days": 720
+        }
+      ]
+    },
+    "HDFCBANK": {
+      "daily": [
+        {
+          "stock": "HDFCBANK",
+          "latest_trade_date": "2025-01-08",
+          "daily": 300,
+          "weekly": 60,
+          "monthly": 13,
+          "yearly": 4,
+          "total_no_of_trading_days": 640
+        }
+      ],
+      "weekly": [
+        {
+          "stock": "HDFCBANK",
+          "latest_trade_date": "2025-01-08",
+          "weekly": 60,
+          "monthly": 13,
+          "yearly": 4,
+          "total_no_of_trading_days": 640
+        }
+      ],
+      "monthly": [
+        {
+          "stock": "HDFCBANK",
+          "latest_trade_date": "2025-01-08",
+          "monthly": 13,
+          "yearly": 4,
+          "total_no_of_trading_days": 640
+        }
+      ],
+      "yearly": [
+        {
+          "stock": "HDFCBANK",
+          "latest_trade_date": "2025-01-08",
+          "yearly": 4,
+          "total_no_of_trading_days": 640
+        }
+      ]
+    },
+    "ICICIBANK": {
+      "daily": [
+        {
+          "stock": "ICICIBANK",
+          "latest_trade_date": "2025-01-07",
+          "daily": 310,
+          "weekly": 62,
+          "monthly": 14,
+          "yearly": 5,
+          "total_no_of_trading_days": 660
+        }
+      ],
+      "weekly": [
+        {
+          "stock": "ICICIBANK",
+          "latest_trade_date": "2025-01-07",
+          "weekly": 62,
+          "monthly": 14,
+          "yearly": 5,
+          "total_no_of_trading_days": 660
+        }
+      ],
+      "monthly": [
+        {
+          "stock": "ICICIBANK",
+          "latest_trade_date": "2025-01-07",
+          "monthly": 14,
+          "yearly": 5,
+          "total_no_of_trading_days": 660
+        }
+      ],
+      "yearly": [
+        {
+          "stock": "ICICIBANK",
+          "latest_trade_date": "2025-01-07",
+          "yearly": 5,
+          "total_no_of_trading_days": 660
+        }
+      ]
+    }
+  }
+}

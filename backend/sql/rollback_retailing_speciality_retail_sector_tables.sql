@@ -1,0 +1,9 @@
+PROMPT Rolling back Retailing Speciality Retail sector tables
+
+DELETE FROM NSE_SECTOR_MASTER WHERE sector_code = 'RETAILING_SPECIALITY_RETAIL';
+DELETE FROM NSE_SYMBOL_SECTOR_MAP WHERE sector_code = 'RETAILING_SPECIALITY_RETAIL';
+-- DROP TABLE NSE_NIFTY_RETAILING_SPECIALITY_RETAIL_STAGING;
+
+COMMIT;
+
+PROMPT Rollback complete. Note: DROP TABLE is commented out per safety standards.

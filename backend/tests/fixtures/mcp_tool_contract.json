@@ -1,0 +1,431 @@
+{
+  "analyze_multi_timeframe": {
+    "properties": {
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframes": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Timeframes"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "analyze_multi_timeframeArguments",
+    "type": "object"
+  },
+  "analyze_symbol": {
+    "properties": {
+      "bars": {
+        "default": 750,
+        "maximum": 2000,
+        "minimum": 35,
+        "title": "Bars",
+        "type": "integer"
+      },
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "analyze_symbolArguments",
+    "type": "object"
+  },
+  "explain_level": {
+    "properties": {
+      "bars": {
+        "default": 750,
+        "maximum": 2000,
+        "minimum": 35,
+        "title": "Bars",
+        "type": "integer"
+      },
+      "level": {
+        "exclusiveMinimum": 0,
+        "title": "Level",
+        "type": "number"
+      },
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol",
+      "level"
+    ],
+    "title": "explain_levelArguments",
+    "type": "object"
+  },
+  "get_breakout_status": {
+    "properties": {
+      "bars": {
+        "default": 500,
+        "maximum": 2000,
+        "minimum": 35,
+        "title": "Bars",
+        "type": "integer"
+      },
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "get_breakout_statusArguments",
+    "type": "object"
+  },
+  "get_latest_price": {
+    "properties": {
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "get_latest_priceArguments",
+    "type": "object"
+  },
+  "get_market_structure": {
+    "properties": {
+      "bars": {
+        "default": 500,
+        "maximum": 2000,
+        "minimum": 35,
+        "title": "Bars",
+        "type": "integer"
+      },
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "get_market_structureArguments",
+    "type": "object"
+  },
+  "get_momentum": {
+    "properties": {
+      "bars": {
+        "default": 250,
+        "maximum": 2000,
+        "minimum": 35,
+        "title": "Bars",
+        "type": "integer"
+      },
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "get_momentumArguments",
+    "type": "object"
+  },
+  "get_ohlcv": {
+    "properties": {
+      "bars": {
+        "default": 250,
+        "maximum": 2000,
+        "minimum": 1,
+        "title": "Bars",
+        "type": "integer"
+      },
+      "end": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "End"
+      },
+      "start": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Start"
+      },
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "get_ohlcvArguments",
+    "type": "object"
+  },
+  "get_price_zones": {
+    "properties": {
+      "bars": {
+        "default": 750,
+        "maximum": 2000,
+        "minimum": 35,
+        "title": "Bars",
+        "type": "integer"
+      },
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "get_price_zonesArguments",
+    "type": "object"
+  },
+  "get_support_resistance": {
+    "properties": {
+      "bars": {
+        "default": 750,
+        "maximum": 2000,
+        "minimum": 35,
+        "title": "Bars",
+        "type": "integer"
+      },
+      "max_levels": {
+        "default": 10,
+        "maximum": 20,
+        "minimum": 1,
+        "title": "Max Levels",
+        "type": "integer"
+      },
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "get_support_resistanceArguments",
+    "type": "object"
+  },
+  "get_swing_points": {
+    "properties": {
+      "bars": {
+        "default": 500,
+        "maximum": 2000,
+        "minimum": 35,
+        "title": "Bars",
+        "type": "integer"
+      },
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "get_swing_pointsArguments",
+    "type": "object"
+  },
+  "get_symbol_info": {
+    "properties": {
+      "symbol": {
+        "title": "Symbol",
+        "type": "string"
+      }
+    },
+    "required": [
+      "symbol"
+    ],
+    "title": "get_symbol_infoArguments",
+    "type": "object"
+  },
+  "health_check": {
+    "properties": {},
+    "title": "health_checkArguments",
+    "type": "object"
+  },
+  "list_symbols": {
+    "properties": {
+      "exchange": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Exchange"
+      },
+      "limit": {
+        "default": 500,
+        "maximum": 500,
+        "minimum": 1,
+        "title": "Limit",
+        "type": "integer"
+      }
+    },
+    "title": "list_symbolsArguments",
+    "type": "object"
+  },
+  "readiness_check": {
+    "properties": {},
+    "title": "readiness_checkArguments",
+    "type": "object"
+  },
+  "scan_price_action": {
+    "properties": {
+      "exchange": {
+        "default": "NSE",
+        "title": "Exchange",
+        "type": "string"
+      },
+      "limit": {
+        "default": 50,
+        "maximum": 100,
+        "minimum": 1,
+        "title": "Limit",
+        "type": "integer"
+      },
+      "min_resistance_distance_pct": {
+        "anyOf": [
+          {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Min Resistance Distance Pct"
+      },
+      "min_score": {
+        "default": 70.0,
+        "maximum": 100,
+        "minimum": 0,
+        "title": "Min Score",
+        "type": "number"
+      },
+      "near_support_pct": {
+        "anyOf": [
+          {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Near Support Pct"
+      },
+      "timeframe": {
+        "default": "1D",
+        "title": "Timeframe",
+        "type": "string"
+      },
+      "universe": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Universe"
+      }
+    },
+    "title": "scan_price_actionArguments",
+    "type": "object"
+  }
+}

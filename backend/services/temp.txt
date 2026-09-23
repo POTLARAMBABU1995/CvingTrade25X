@@ -1,0 +1,200 @@
+from __future__ import annotations
+
+import csv
+from pathlib import Path
+from threading import Lock
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Set
+
+from db import fetch_ohlc_series_from_oracle
+
+
+@dataclass
+class SymbolSnapshot:
+    symbol: str
+    trading_date: datetime
+    close: float
+    previous_close: float
+
+    @property
+    def change(self) -> float:
+        return self.close - self.previous_close
+
+    @property
+    def percent_change(self) -> Optional[float]:
+        try:
+            if self.previous_close in (None, 0):
+                return None
+            return (self.change / self.previous_close) * 100.0
+        except Exception:
+            return None
+
+
+_DATA_DIR = Path(__file__).resolve().parent.parent / 'data'
+_NIFTY50_CACHE: Dict[str, Any] = {'path': None, 'mtime': None, 'symbols': set()}
+_NIFTY50_LOCK = Lock()
+
+
+def _find_latest_nifty50_file() -> Path | None:
+    try:
+        files = sorted(_DATA_DIR.glob('nifty50*.csv'), key=lambda f: f.stat().st_mtime, reverse=True)
+    except Exception:
+        return None
+    return files[0] if files else None
+
+
+def _load_nifty50_symbols() -> Set[str]:
+    path = _find_latest_nifty50_file()
+    if path is None or not path.exists():
+        with _NIFTY50_LOCK:
+            _NIFTY50_CACHE['path'] = None
+            _NIFTY50_CACHE['mtime'] = None
+            _NIFTY50_CACHE['symbols'] = set()
+        return set()
+    try:
+        mtime = path.stat().st_mtime
+    except Exception:
+        return set()
+    with _NIFTY50_LOCK:
+        cached_path = _NIFTY50_CACHE.get('path')
+        cached_mtime = _NIFTY50_CACHE.get('mtime')
+        cached_symbols = _NIFTY50_CACHE.get('symbols')
+        if cached_path == path and cached_mtime == mtime and isinstance(cached_symbols, set) and cached_symbols:
+            return set(cached_symbols)
+    symbols: Set[str] = set()
+    try:
+        with path.open(newline='') as handle:
+            for row in csv.reader(handle):
+                if not row:
+                    continue
+                symbol = (row[0] or '').strip()
+                if not symbol or symbol.upper() == 'SYMBOL':
+                    continue
+                symbols.add(symbol.upper())
+    except Exception:
+        symbols = set()
+    with _NIFTY50_LOCK:
+        _NIFTY50_CACHE['path'] = path
+        _NIFTY50_CACHE['mtime'] = mtime
+        _NIFTY50_CACHE['symbols'] = set(symbols)
+    return symbols
+
+
+
+def _fmt_date(dt: datetime | None) -> str:
+    if isinstance(dt, datetime):
+        try:
+            return dt.strftime('%d-%m-%Y')
+        except Exception:
+            return ''
+    return ''
+
+
+def _build_snapshots() -> List[SymbolSnapshot]:
+    series_by_symbol = fetch_ohlc_series_from_oracle()
+    snapshots: List[SymbolSnapshot] = []
+
+    for symbol, candles in series_by_symbol.items():
+        if not candles:
+            continue
+        sorted_candles = sorted(
+            (c for c in candles if c.get('date') and c.get('close') is not None),
+            key=lambda c: c['date']
+        )
+        if len(sorted_candles) < 2:
+            continue
+        latest = sorted_candles[-1]
+        prev = None
+        # walk backwards to find previous close value
+        for entry in reversed(sorted_candles[:-1]):
+            if entry.get('close') is not None:
+                prev = entry
+                break
+        if prev is None:
+            continue
+        try:
+            latest_close = float(latest['close'])
+            prev_close = float(prev['close'])
+        except (TypeError, ValueError):
+            continue
+        trading_date = latest.get('date')
+        if not isinstance(trading_date, datetime):
+            continue
+        snapshots.append(SymbolSnapshot(
+            symbol=symbol,
+            trading_date=trading_date,
+            close=latest_close,
+            previous_close=prev_close,
+        ))
+    return snapshots
+
+
+def load_dashboard_payload() -> Dict[str, Any]:
+    snapshots = _build_snapshots()
+    if not snapshots:
+        return {
+            'tradingDate': '',
+            'totalSymbols': 0,
+            'universeSymbols': 0,
+            'gainers': [],
+            'losers': [],
+            'breadth': {'advances': 0, 'declines': 0, 'unchanged': 0},
+        }
+
+    latest_date = max(snap.trading_date for snap in snapshots)
+    latest_all = [snap for snap in snapshots if snap.trading_date == latest_date]
+    if not latest_all:
+        latest_all = snapshots
+
+    advances = sum(1 for snap in latest_all if snap.change > 0)
+    declines = sum(1 for snap in latest_all if snap.change < 0)
+    unchanged = sum(1 for snap in latest_all if abs(snap.change) < 1e-9)
+
+    nifty50_symbols = _load_nifty50_symbols()
+    latest_nifty = [snap for snap in latest_all if (snap.symbol or '').upper() in nifty50_symbols] if nifty50_symbols else list(latest_all)
+    if not latest_nifty:
+        latest_nifty = list(latest_all)
+
+    def serialize(items: List[SymbolSnapshot]) -> List[Dict[str, Any]]:
+        out: List[Dict[str, Any]] = []
+        for idx, snap in enumerate(items, 1):
+            percent = snap.percent_change
+            price = round(snap.close, 2)
+            points = round(snap.change, 2)
+            percent_value = round(percent, 2) if percent is not None else None
+            out.append({
+                'sNo': idx,
+                'symbol': snap.symbol,
+                'stockName': snap.symbol,
+                'tradingDate': _fmt_date(snap.trading_date),
+                'price': price,
+                'close': price,
+                'previousClose': round(snap.previous_close, 2),
+                'points': points,
+                'change': points,
+                'changeFormatted': f"{points:+.2f}",
+                'percentage': percent_value,
+                'percentChange': percent_value,
+                'percentageFormatted': (f"{percent_value:+.2f}%" if percent_value is not None else None),
+            })
+        return out
+
+    gainers = sorted(latest_nifty, key=lambda s: s.change, reverse=True)[:5]
+    losers = sorted(latest_nifty, key=lambda s: s.change)[:5]
+
+    return {
+        'tradingDate': _fmt_date(latest_date),
+        'totalSymbols': len(latest_all),
+        'universeSymbols': len(snapshots),
+        'gainers': serialize(gainers),
+        'losers': serialize(losers),
+        'breadth': {
+            'advances': advances,
+            'declines': declines,
+            'unchanged': unchanged,
+        }
+    }
+
+
+

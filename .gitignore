@@ -1,0 +1,93 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# FYERS/API tokens
+token.json
+tokens.json
+access_token*
+refresh_token*
+*fyers*token*
+runtime/*.json
+runtime/secrets/
+secrets/
+
+# Oracle
+wallet/
+Wallet_*/
+tnsnames.ora
+sqlnet.ora
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+dist/
+build/
+
+# Cache
+.pytest_cache/
+.mypy_cache/
+.cache/
+
+# Temporary
+*.tmp
+*.bak
+temp/
+tmp/
+*.csv
+*.CSV
+runtime/status/*.json
+
+# Generated Playwright artifacts
+output/playwright/
+
+# Backend generated cache
+backend/data/cache/
+
+# Backend generated snapshots
+backend/data/snapshot_*.json
+
+# Local MCP / Playwright tooling
+.mcp-wheelhouse/
+.playwright-cli/
+.playwright-mcp/
+.venv-mcp/
+
+# Runtime generated backups and snapshots
+runtime/backups/
+runtime/snapshots/
+
+# Downloaded NSE source archives
+batch/*/downloads/
+
+# Manual S/R generated datasets and processing artifacts
+batch/manual_sr_image_queue/[0-9][0-9]_*/
+
+# Generated application cache
+backend/cache/
+
+# Generated runtime reports
+runtime/reports/

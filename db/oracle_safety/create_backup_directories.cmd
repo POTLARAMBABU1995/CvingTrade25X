@@ -1,0 +1,18 @@
+@echo off
+setlocal
+
+echo [INFO] Creating CvingTrade25X Oracle safety backup folders...
+
+if not exist "E:\DB_BACKUP_SAFETY" mkdir "E:\DB_BACKUP_SAFETY"
+if not exist "E:\DB_BACKUP_SAFETY\SQLDEV_EXPORT" mkdir "E:\DB_BACKUP_SAFETY\SQLDEV_EXPORT"
+if not exist "E:\DB_BACKUP_SAFETY\SQLDEV_EXPORT\DUMP" mkdir "E:\DB_BACKUP_SAFETY\SQLDEV_EXPORT\DUMP"
+if not exist "E:\DB_BACKUP_SAFETY\SQLDEV_EXPORT\LOG" mkdir "E:\DB_BACKUP_SAFETY\SQLDEV_EXPORT\LOG"
+if not exist "E:\DB_BACKUP_SAFETY\SQLDEV_EXPORT\DDL" mkdir "E:\DB_BACKUP_SAFETY\SQLDEV_EXPORT\DDL"
+if not exist "E:\DB_BACKUP_SAFETY\ORADATA" mkdir "E:\DB_BACKUP_SAFETY\ORADATA"
+if not exist "E:\DB_BACKUP_SAFETY\LOGS" mkdir "E:\DB_BACKUP_SAFETY\LOGS"
+if not exist "E:\DB_BACKUP_SAFETY\RMAN" mkdir "E:\DB_BACKUP_SAFETY\RMAN"
+if not exist "E:\DB_BACKUP_SAFETY\REPORTS" mkdir "E:\DB_BACKUP_SAFETY\REPORTS"
+
+echo [INFO] Folder setup complete.
+dir "E:\DB_BACKUP_SAFETY"
+endlocal

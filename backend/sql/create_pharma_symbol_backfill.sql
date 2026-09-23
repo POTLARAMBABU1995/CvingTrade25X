@@ -1,0 +1,107 @@
+PROMPT Backfilling explicit Pharma symbols into staging and sector-map tables (idempotent).
+SET DEFINE OFF;
+
+DECLARE
+  v_sector_value VARCHAR2(100) := 'Pharma';
+BEGIN
+  MERGE INTO NSE_NIFTY_PHARMA_STAGING tgt
+  USING (
+    SELECT 'SENORES' AS symbol FROM dual UNION ALL
+    SELECT 'IOLCP' FROM dual UNION ALL
+    SELECT 'ORCHPHARMA' FROM dual UNION ALL
+    SELECT 'SMSPHARMA' FROM dual UNION ALL
+    SELECT 'BLISSGVS' FROM dual UNION ALL
+    SELECT 'SOLARA' FROM dual UNION ALL
+    SELECT 'TATVA' FROM dual UNION ALL
+    SELECT 'LINCOLN' FROM dual UNION ALL
+    SELECT 'JAGSNPHARM' FROM dual
+  ) src
+  ON (UPPER(TRIM(tgt.SYMBOL)) = src.symbol)
+  WHEN MATCHED THEN UPDATE SET
+    tgt.SECTOR = v_sector_value
+  WHERE NVL(UPPER(TRIM(tgt.SECTOR)), '~') <> UPPER(v_sector_value)
+  WHEN NOT MATCHED THEN INSERT (SYMBOL, SECTOR)
+  VALUES (src.symbol, v_sector_value);
+END;
+/
+
+DECLARE
+  v_proc_exists NUMBER := 0;
+  PROCEDURE sync_sector_map_manual IS
+  BEGIN
+    MERGE INTO NSE_SYMBOL_SECTOR_MAP tgt
+    USING (
+      SELECT 'SENORES' AS symbol FROM dual UNION ALL
+      SELECT 'IOLCP' FROM dual UNION ALL
+      SELECT 'ORCHPHARMA' FROM dual UNION ALL
+      SELECT 'SMSPHARMA' FROM dual UNION ALL
+      SELECT 'BLISSGVS' FROM dual UNION ALL
+      SELECT 'SOLARA' FROM dual UNION ALL
+      SELECT 'TATVA' FROM dual UNION ALL
+      SELECT 'LINCOLN' FROM dual UNION ALL
+      SELECT 'JAGSNPHARM' FROM dual
+    ) src
+    ON (UPPER(TRIM(tgt.SYMBOL)) = src.symbol)
+    WHEN MATCHED THEN UPDATE SET
+      tgt.SECTOR_CODE = 'PHARMA'
+    WHERE NVL(UPPER(TRIM(tgt.SECTOR_CODE)), '~') <> 'PHARMA'
+    WHEN NOT MATCHED THEN INSERT (SYMBOL, SECTOR_CODE)
+    VALUES (src.symbol, 'PHARMA');
+  END sync_sector_map_manual;
+BEGIN
+  SELECT COUNT(*)
+    INTO v_proc_exists
+    FROM user_objects
+   WHERE object_name = 'PR_SYNC_NSE_SYMBOL_SECTOR_MAP_FROM_STAGING'
+     AND object_type = 'PROCEDURE';
+
+  IF v_proc_exists > 0 THEN
+    BEGIN
+      PR_SYNC_NSE_SYMBOL_SECTOR_MAP_FROM_STAGING;
+    EXCEPTION
+      WHEN OTHERS THEN
+        sync_sector_map_manual;
+    END;
+  ELSE
+    sync_sector_map_manual;
+  END IF;
+END;
+/
+
+COMMIT;
+
+PROMPT Validation - staging rows:
+SELECT
+  UPPER(TRIM(SYMBOL)) AS SYMBOL,
+  SECTOR
+FROM NSE_NIFTY_PHARMA_STAGING
+WHERE UPPER(TRIM(SYMBOL)) IN (
+  'SENORES',
+  'IOLCP',
+  'ORCHPHARMA',
+  'SMSPHARMA',
+  'BLISSGVS',
+  'SOLARA',
+  'TATVA',
+  'LINCOLN',
+  'JAGSNPHARM'
+)
+ORDER BY 1;
+
+PROMPT Validation - sector map rows:
+SELECT
+  UPPER(TRIM(SYMBOL)) AS SYMBOL,
+  SECTOR_CODE
+FROM NSE_SYMBOL_SECTOR_MAP
+WHERE UPPER(TRIM(SYMBOL)) IN (
+  'SENORES',
+  'IOLCP',
+  'ORCHPHARMA',
+  'SMSPHARMA',
+  'BLISSGVS',
+  'SOLARA',
+  'TATVA',
+  'LINCOLN',
+  'JAGSNPHARM'
+)
+ORDER BY 1;
