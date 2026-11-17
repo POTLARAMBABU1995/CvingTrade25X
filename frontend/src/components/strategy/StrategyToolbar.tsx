@@ -259,7 +259,7 @@ export function StrategyToolbar({
     <section
       className={cn(
         'strategy-toolbar w-full',
-        !singleSurface && 'strategy-toolbar-shell rounded-[32px] border border-sky-200/90 bg-sky-50/95 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.07)] backdrop-blur-xl dark:border-sky-200/90 dark:bg-sky-50/95 dark:shadow-[0_18px_50px_rgba(15,23,42,0.12)]',
+        !singleSurface && 'strategy-toolbar-shell',
         className,
       )}
     >
@@ -267,8 +267,8 @@ export function StrategyToolbar({
         className={cn(
           'strategy-toolbar-scroll w-full overflow-x-auto',
           singleSurface
-            ? 'rounded-[32px] border border-sky-200/90 bg-sky-50/95 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.07)] backdrop-blur-xl dark:border-sky-200/90 dark:bg-sky-50/95 dark:shadow-[0_18px_50px_rgba(15,23,42,0.12)]'
-            : 'rounded-[28px] border border-sky-200/90 bg-sky-50/95 p-4 shadow-inner dark:border-sky-200/90 dark:bg-sky-50/95',
+            ? 'rounded-[32px] border border-sky-200/90 bg-sky-50/95 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.07)] backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(15,23,42,0.12)]'
+            : 'rounded-[28px] border border-sky-200/90 bg-sky-50/95 p-4 shadow-inner dark:border-slate-700 dark:bg-slate-900',
         )}
       >
         <div className="strategy-toolbar-content flex w-full min-w-[860px] flex-col gap-3 lg:min-w-0">
@@ -301,7 +301,7 @@ export function StrategyToolbar({
                 <span className="sr-only">{searchPlaceholder}</span>
                 <SearchIcon className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input
-                  className="h-11 w-full rounded-full border border-sky-200 bg-white/95 pl-11 pr-4 text-sm font-bold text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-sky-300 focus:ring-4 focus:ring-sky-100 dark:border-sky-200 dark:bg-white/95 dark:text-slate-700 dark:focus:border-sky-300 dark:focus:ring-sky-100"
+                  className="h-11 w-full rounded-full border border-sky-200 bg-white/95 pl-11 pr-4 text-sm font-bold text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-sky-300 focus:ring-4 focus:ring-sky-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-900"
                   placeholder={searchPlaceholder}
                   type="search"
                   value={searchValue}
@@ -312,7 +312,7 @@ export function StrategyToolbar({
 
             {showTimeframe && onTimeframeChange ? (
               <select
-                className="h-11 shrink-0 rounded-full border border-sky-200 bg-white px-5 text-sm font-black text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100 dark:border-sky-200 dark:bg-white dark:text-slate-900"
+                className="h-11 shrink-0 rounded-full border border-sky-200 bg-white px-5 text-sm font-black text-slate-900 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-900"
                 aria-label="Timeframe"
                 value={timeframe}
                 onChange={(event) => onTimeframeChange(event.currentTarget.value)}
@@ -324,7 +324,7 @@ export function StrategyToolbar({
             ) : null}
 
             {showTotal ? (
-              <span className="inline-flex h-11 shrink-0 items-center rounded-full border border-sky-200 bg-white px-5 text-sm font-black text-slate-800 dark:border-sky-200 dark:bg-white dark:text-slate-800">
+              <span className="inline-flex h-11 shrink-0 items-center rounded-full border border-sky-200 bg-white px-5 text-sm font-black text-slate-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100">
                 Total: {(Number(total) || 0).toLocaleString('en-IN')}
               </span>
             ) : null}
@@ -366,7 +366,7 @@ export function StrategyToolbar({
             ) : null}
           </div>
 
-          <div className="strategy-toolbar-row strategy-toolbar-row-meta flex w-full flex-wrap items-center gap-x-2 gap-y-1 px-2 text-xs font-black text-slate-600 dark:text-slate-600">
+          <div className="strategy-toolbar-row strategy-toolbar-row-meta flex w-full flex-wrap items-center gap-x-2 gap-y-1 px-2 text-xs font-black text-slate-600 dark:text-slate-400">
             {metadata.map((item, index) => (
               <Fragment key={item}>
                 <span>{item}</span>

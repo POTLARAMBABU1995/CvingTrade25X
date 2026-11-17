@@ -5,6 +5,7 @@ import { handleInternalNavigationClick } from '../../utils/internalNavigation';
 
 type AuthShellProps = {
   children: ReactNode;
+  hideScrollbar?: boolean;
   eyebrow: string;
   title: string;
 };
@@ -15,9 +16,9 @@ const benefits = [
   'Focused NSE intelligence for repeatable trading decisions.',
 ] as const;
 
-export function AuthShell({ children, eyebrow, title }: AuthShellProps) {
+export function AuthShell({ children, eyebrow, title, hideScrollbar = false }: AuthShellProps) {
   return (
-    <div className="page-theme--auth legacy-react-shell fundamental-app min-h-screen overflow-x-hidden bg-[linear-gradient(135deg,#f7faf8_0%,#eef7f1_44%,#fff7f4_100%)] text-slate-950 dark:bg-[linear-gradient(135deg,#07110d_0%,#101827_50%,#1a1012_100%)] dark:text-slate-100">
+    <div className={`page-theme--auth legacy-react-shell fundamental-app min-h-screen overflow-x-hidden bg-[linear-gradient(135deg,#f7faf8_0%,#eef7f1_44%,#fff7f4_100%)] text-slate-950 dark:bg-[linear-gradient(135deg,#07110d_0%,#101827_50%,#1a1012_100%)] dark:text-slate-100${hideScrollbar ? ' auth-login-page flex flex-col' : ''}`}>
       <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/84 backdrop-blur-2xl dark:border-slate-800/80 dark:bg-slate-950/82">
         <div className="mx-auto flex min-h-[70px] w-full max-w-[1180px] flex-wrap items-center justify-between gap-4 px-4 lg:px-6">
           <a className="flex items-center gap-3 text-lg font-black text-slate-950 dark:text-slate-100" href="/app/home" onClick={(event) => handleInternalNavigationClick(event, '/app/home')}>
@@ -31,10 +32,10 @@ export function AuthShell({ children, eyebrow, title }: AuthShellProps) {
         </div>
       </header>
 
-      <main className="relative mx-auto grid min-h-[calc(100vh-70px)] w-full max-w-[1180px] place-items-center px-4 py-10 lg:px-6">
+      <main className={`auth-shell-main relative mx-auto grid w-full max-w-[1180px] place-items-center px-4 py-10 lg:px-6 ${hideScrollbar ? 'flex-auto' : 'min-h-[calc(100vh-70px)]'}`}>
         <div className="grid w-full overflow-hidden rounded-lg border border-slate-200/80 bg-white/88 shadow-[0_28px_70px_rgba(15,23,42,0.12)] backdrop-blur-2xl dark:border-slate-800/85 dark:bg-slate-950/84 dark:shadow-[0_28px_80px_rgba(0,0,0,0.42)] lg:grid-cols-[1.05fr_0.95fr]">
-          <section className="relative order-2 overflow-hidden border-b border-slate-200/80 bg-[linear-gradient(145deg,rgba(5,150,105,0.12),rgba(255,255,255,0.78)_48%,rgba(225,29,72,0.1))] p-7 dark:border-slate-800/80 dark:bg-[linear-gradient(145deg,rgba(16,185,129,0.16),rgba(15,23,42,0.88)_48%,rgba(244,63,94,0.12))] md:p-9 lg:order-1 lg:border-b-0 lg:border-r">
-            <div className="relative">
+          <section className="auth-shell-panel relative order-2 overflow-hidden border-b border-slate-200/80 bg-[linear-gradient(145deg,rgba(5,150,105,0.12),rgba(255,255,255,0.78)_48%,rgba(225,29,72,0.1))] p-7 dark:border-slate-800/80 dark:bg-[linear-gradient(145deg,rgba(16,185,129,0.16),rgba(15,23,42,0.88)_48%,rgba(244,63,94,0.12))] md:p-9 lg:order-1 lg:border-b-0 lg:border-r">
+            <div className="auth-shell-intro relative">
               <span className="inline-flex rounded-lg border border-emerald/30 bg-white/82 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-emerald backdrop-blur-xl dark:border-emerald/30 dark:bg-emerald/10 dark:text-emerald">{eyebrow}</span>
               <h1 className="mt-4 text-4xl font-black text-slate-950 dark:text-white md:text-5xl">{title}</h1>
               <p className="mt-4 max-w-xl text-sm font-black uppercase tracking-[0.18em] text-slate-600 dark:text-slate-300">
@@ -81,7 +82,7 @@ export function AuthShell({ children, eyebrow, title }: AuthShellProps) {
             </div>
           </section>
 
-          <section className="order-1 bg-white/96 p-6 text-slate-950 dark:bg-slate-950/92 dark:text-slate-100 md:p-8 lg:order-2">
+          <section className="auth-shell-panel order-1 bg-white/96 p-6 text-slate-950 dark:bg-slate-950/92 dark:text-slate-100 md:p-8 lg:order-2">
             {children}
           </section>
         </div>

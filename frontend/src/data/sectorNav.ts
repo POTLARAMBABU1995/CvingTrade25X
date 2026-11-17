@@ -12,7 +12,7 @@ export type SectorPageItem = {
   slug: string;
 };
 
-export const SECTOR_DIRECTORY_PAGE = '/app/sector/stocks/auto';
+export const SECTOR_DIRECTORY_PAGE = '/app/sector/stocks';
 export const SECTOR_OVERVIEW_PAGE = '/app/sector/overview';
 export const STOCKEDGE_SECTOR_ROTATION_PAGE = '/app/sector/stockedge-rotation';
 
@@ -24,7 +24,7 @@ export const sectorNavItems = [
     page: STOCKEDGE_SECTOR_ROTATION_PAGE,
   },
   { href: SECTOR_OVERVIEW_PAGE, label: 'Sector_Overview', page: SECTOR_OVERVIEW_PAGE },
-  { href: '/app/sector/stocks/auto', label: 'Sector Wise Stocks', page: SECTOR_DIRECTORY_PAGE },
+  { href: SECTOR_DIRECTORY_PAGE, label: 'Sector Wise Stocks', page: SECTOR_DIRECTORY_PAGE },
 ] satisfies ReadonlyArray<SectorNavItem>;
 
 export const sectorDropdownNavItems = [

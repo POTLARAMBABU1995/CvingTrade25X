@@ -114,6 +114,7 @@ export function FyersDatePickerField({
       <span>{label}</span>
       <div className="fyers-date-picker__row">
         <Select
+          aria-label={`${label} year`}
           className="fyers-date-picker__control"
           invalid={invalid}
           variant="light"
@@ -124,6 +125,7 @@ export function FyersDatePickerField({
           {years.map((option) => <option key={option} value={option}>{option}</option>)}
         </Select>
         <Select
+          aria-label={`${label} month`}
           className="fyers-date-picker__control"
           invalid={invalid}
           variant="light"
@@ -134,6 +136,7 @@ export function FyersDatePickerField({
           {MONTH_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </Select>
         <Select
+          aria-label={`${label} day`}
           className="fyers-date-picker__control"
           invalid={invalid}
           variant="light"

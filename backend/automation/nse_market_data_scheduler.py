@@ -1061,12 +1061,41 @@ def run_scheduler(*, dry_run: bool = False, lock_stale_seconds: int = 3 * 60 * 6
     if holiday_warning:
       _emit(run_id, "scheduler", None, STATUS_STARTED, holiday_warning)
 
-    target = _target_context(
-      now_local=now_local,
-      config=config,
-      holidays=holidays,
-      current_start_time=current_start_time,
-    )
+    try:
+      target = _target_context(
+        now_local=now_local,
+        config=config,
+        holidays=holidays,
+        current_start_time=current_start_time,
+      )
+    except Exception as exc:
+      # Readiness can fail before any module starts. Keep status truthful and
+      # avoid publishing raw connection details from driver exceptions.
+      message = (
+        "Oracle account is locked (ORA-28000). A DBA must unlock the configured account before extraction can resume."
+        if 'ORA-28000' in str(exc)
+        else "Automation database readiness check failed. Review backend connectivity and configuration."
+      )
+      next_retry_at = (now_local + dt.timedelta(seconds=_retry_interval_seconds())).replace(microsecond=0).isoformat()
+      pending_modules = _empty_runtime_modules(status="PENDING_RETRY", message=message)
+      failure_payload = {
+        "current_status": RUNTIME_STATUS_FAILED,
+        "is_running": False,
+        "last_run_id": run_id,
+        "last_started_at": now_local.replace(microsecond=0).isoformat(),
+        "last_completed_at": now_local.replace(microsecond=0).isoformat(),
+        "target_trade_date": "",
+        "target_date_type": "",
+        "retry_until_success": True,
+        "next_retry_at": next_retry_at,
+        "message": message,
+        "modules": pending_modules,
+        "totals": _calculate_totals(pending_modules),
+      }
+      failure_payload["latest_result"] = status_svc.build_latest_result_snapshot(failure_payload)
+      _update_runtime_status(failure_payload)
+      _emit(run_id, "scheduler", None, STATUS_FAILED, message, rows_failed=1, next_retry_at=next_retry_at)
+      return 1
     trade_date = target.get("trade_date") if isinstance(target.get("trade_date"), dt.date) else None
     target_date_type = str(target.get("target_date_type") or "").strip().upper()
     context_status = str(target.get("current_status") or RUNTIME_STATUS_IDLE).strip().upper()

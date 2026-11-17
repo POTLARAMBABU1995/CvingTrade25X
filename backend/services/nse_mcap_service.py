@@ -1681,7 +1681,7 @@ def _load_nifty500_symbol_set(*, require_file: bool = True) -> set[str]:
 
 
 def _nifty500_source_path() -> str:
-  return str(nifty500_svc.resolve_existing_csv_path())
+  return nifty500_svc.SOURCE_TABLE
 
 
 def _coerce_allowed_symbols(allowed_symbols: Optional[Sequence[str]]) -> Optional[set[str]]:
@@ -1692,8 +1692,6 @@ def _coerce_allowed_symbols(allowed_symbols: Optional[Sequence[str]]) -> Optiona
 
 
 def _runtime_filter_symbols() -> Optional[set[str]]:
-  if not _FILTER_TO_NIFTY500:
-    return None
   return _load_nifty500_symbol_set(require_file=True)
 
 
@@ -2796,6 +2794,7 @@ def _symbols_for_enrichment(trade_date: dt.date, limit: Optional[int], override_
         seen.add(token)
         cleaned.append(token)
     return cleaned[:limit] if limit else cleaned
+  allowed_symbols = _load_nifty500_symbol_set()
   conn = _acquire_connection()
   try:
     with conn.cursor() as cur:
@@ -2816,6 +2815,7 @@ def _symbols_for_enrichment(trade_date: dt.date, limit: Optional[int], override_
         )
       ''', {'trade_date': trade_date, 'file_source': _FILE_SOURCE, 'quote_source': _QUOTE_SOURCE})
       rows = [str(row[0]).upper() for row in (cur.fetchall() or []) if row and row[0]]
+      rows = [symbol for symbol in rows if symbol in allowed_symbols]
       return rows[:limit] if limit else rows
   finally:
     conn.close()
@@ -3937,6 +3937,10 @@ def _parse_runtime_payload(payload: Dict[str, Any], line_logger: Optional[Callab
   except (TypeError, ValueError):
     enrich_limit = None
   allowed_symbols = _runtime_filter_symbols()
+  from .nse_symbol_normalization import canonical_nse_symbol
+  symbols = list(dict.fromkeys(canonical_nse_symbol(symbol) for symbol in symbols))
+  if any(symbol not in allowed_symbols for symbol in symbols):
+    raise ValueError('Requested symbols must belong to NSE_SYMBOLS_COMMON_DATA.')
   if line_logger and allowed_symbols is not None:
     line_logger(f'[INFO] Filtering against NIFTY500 universe count={len(allowed_symbols)} path={_nifty500_source_path()}')
   if line_logger and len(trade_dates) > 1:

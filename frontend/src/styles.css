@@ -63,7 +63,36 @@ body.dark {
   --app-table-border: rgba(100, 116, 139, 0.48);
 }
 
+@media (min-width: 1024px) and (max-height: 800px) {
+  .auth-login-page .auth-shell-main {
+    @apply py-3;
+  }
+
+  .auth-login-page .auth-shell-panel {
+    @apply py-4;
+  }
+
+  .auth-login-page .auth-shell-intro > * + * {
+    @apply mt-2.5;
+  }
+}
+
 @layer base {
+  /* Hide login scrollbars without clipping the reset form or small-screen content. */
+  html:has(.auth-login-page),
+  body:has(.auth-login-page),
+  .auth-login-page {
+    scrollbar-width: none;
+  }
+
+  html:has(.auth-login-page)::-webkit-scrollbar,
+  body:has(.auth-login-page)::-webkit-scrollbar,
+  .auth-login-page::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -6233,7 +6262,6 @@ body.dark {
     line-height: 1.35;
   }
 
-  .historical-data-react-page.ema-page--dark .historical-data-strategy-toolbar.strategy-toolbar-shell,
   .historical-data-react-page.ema-page--dark .historical-data-strategy-toolbar .strategy-toolbar-scroll {
     border-color: rgba(51, 65, 85, 0.92);
     background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(17, 24, 39, 0.96));
@@ -6935,6 +6963,24 @@ body.dark {
     align-items: start;
   }
 
+  .fyers-automation-react-page .database-fyers-block {
+    container-type: inline-size;
+  }
+
+  .fyers-automation-react-page .fyers-react-form-grid--dates {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fyers-automation-react-page .fyers-react-form-grid--dates > .database-react-field:last-child {
+    grid-column: 1 / -1;
+  }
+
+  @container (max-width: 480px) {
+    .fyers-automation-react-page .fyers-react-form-grid--dates {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
   .fyers-react-actions {
     display: flex;
     flex-wrap: wrap;
@@ -7048,6 +7094,22 @@ body.dark {
 
   .fyers-date-picker__control {
     min-width: 0;
+  }
+
+  .fyers-automation-react-page .fyers-date-picker__row {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.85fr);
+    gap: 6px;
+  }
+
+  .fyers-automation-react-page .fyers-date-picker__control {
+    padding-inline: 8px;
+  }
+
+  .fyers-authorization-strip > .database-badge {
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.6;
   }
 
   .fyers-date-picker__meta {

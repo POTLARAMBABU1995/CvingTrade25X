@@ -114,42 +114,12 @@ def _candidate_symbol_file_paths(symbol_file_path: Optional[str]) -> List[Path]:
 
 
 def resolve_symbol_file_path(symbol_file_path: Optional[str] = None) -> Path:
-    candidates = _candidate_symbol_file_paths(symbol_file_path)
-    for path in candidates:
-        if path.exists() and path.is_file():
-            return path
-    return candidates[0] if candidates else Path(_DEFAULT_SYMBOL_FILE_PATH).expanduser()
+    # Compatibility metadata field; client paths can no longer override membership.
+    return Path(nifty500_svc.SOURCE_TABLE)
 
 
 def load_valid_symbols(symbol_file_path: Optional[str] = None) -> set[str]:
-    path = resolve_symbol_file_path(symbol_file_path)
-    if not path.exists() or not path.is_file():
-        raise FileNotFoundError(f"Valid-symbol file is missing: {path}")
-
-    with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        reader = csv.DictReader(handle)
-        if reader.fieldnames:
-            symbol_col = _resolve_symbol_column(reader.fieldnames or [])
-            symbols = {
-                normalized
-                for row in reader
-                for normalized in [normalize_symbol((row or {}).get(symbol_col or "", ""))]
-                if normalized
-            }
-            if symbols:
-                return symbols
-
-    # Fallback: first-column CSV without a header.
-    symbols: set[str] = set()
-    with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        plain_reader = csv.reader(handle, skipinitialspace=True)
-        for row in plain_reader:
-            if not row:
-                continue
-            normalized = normalize_symbol(row[0])
-            if normalized:
-                symbols.add(normalized)
-    return symbols
+    return set(nifty500_svc.load_existing_symbols(require_file=True))
 
 
 def find_csv_files(download_dir: Path | str) -> List[Path]:

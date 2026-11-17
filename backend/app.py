@@ -798,21 +798,9 @@ def create_app(
     })
 
   def _nse_symbols_payload():
-    payload = request.get_json(silent=True) if request.method == 'POST' else {}
-    if not isinstance(payload, dict):
-      payload = {}
-    symbol_file_path = (
-      request.args.get('symbolFilePath')
-      or request.args.get('symbol_file_path')
-      or payload.get('symbolFilePath')
-      or payload.get('symbol_file_path')
-    )
-    safe_symbol_file_path = _resolve_symbol_file_path_safe(symbol_file_path)
-    if symbol_file_path and not safe_symbol_file_path:
-      return _json_api_error('Invalid symbol file path.', 400)
     try:
-      symbols = sorted(nse_existing_csv_symbol_svc.load_valid_symbols(safe_symbol_file_path))
-      resolved = nse_existing_csv_symbol_svc.resolve_symbol_file_path(safe_symbol_file_path)
+      symbols = sorted(nse_existing_csv_symbol_svc.load_valid_symbols())
+      resolved = nse_existing_csv_symbol_svc.resolve_symbol_file_path()
       return jsonify({
         'ok': True,
         'status': 'success',

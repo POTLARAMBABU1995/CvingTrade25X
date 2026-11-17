@@ -234,6 +234,8 @@ function normalizeDateKey(value: unknown): string | null {
   if (value === null || value === undefined) return null;
   const text = String(value).trim();
   if (!text || text === '-') return null;
+  const displayDate = /^(\d{2})-(\d{2})-(\d{4})(?:$|\s)/.exec(text);
+  if (displayDate) return `${displayDate[3]}-${displayDate[2]}-${displayDate[1]}`;
   return text.length >= 10 ? text.slice(0, 10) : text;
 }
 
@@ -447,7 +449,7 @@ function buildInitialDashboardState(initialPayload?: unknown): InitialDashboardS
     message: 'Checking backend...',
     payload: null,
     status: 'loading',
-    tickerPayload: null,
+    tickerPayload: cachedTicker?.moversPayload ?? null,
   };
 }
 
@@ -577,28 +579,26 @@ export function DashboardPage({ disableFetch = false, initialPayload }: Dashboar
     options: { silent?: boolean } = {},
   ): Promise<boolean> => {
     const silent = options.silent === true;
-    if (!forceRefresh) {
-      const cached = readFreshDashboardCache();
-      if (cached?.payload) {
-        setPayload(cached.payload);
-        latestTradingDateRef.current = extractDashboardDateKey(cached.payload) ?? latestTradingDateRef.current;
-        setLastUpdatedAt(cached.ts);
-        setStatus('online');
-        setMessage('Live');
-        return false;
-      }
-    }
     if (!silent) {
       setStatus('loading');
       setMessage(forceRefresh ? 'Refreshing dashboard data...' : 'Loading dashboard data...');
     }
     try {
-      const data = await fetchDashboardMovers<unknown>(forceRefresh ? { refresh: 1 } : {}, { signal });
+      const params = forceRefresh ? { refresh: 1 } : { checkLatest: 1 };
+      const data = await fetchDashboardMovers<unknown>(params, { signal });
+      if (signal?.aborted) return false;
       const payloadIsCurrent = breadthPayloadIsCurrent(data);
       const cached = readFreshDashboardCache();
       const latestDateKey = extractDashboardDateKey(data);
       const previousDateKey = latestTradingDateRef.current;
-      const currentSegments = breadthSegments(payload);
+      if (previousDateKey && (!latestDateKey || latestDateKey < previousDateKey)) {
+        if (!silent) {
+          setStatus('online');
+          setMessage('Live');
+        }
+        return false;
+      }
+      const currentSegments = breadthSegments(cached?.payload);
       const nextSegments = breadthSegments(data);
       const sameSegmentShape = currentSegments.length === nextSegments.length && currentSegments.every((segment, index) => segment === nextSegments[index]);
       if (!forceRefresh && payloadIsCurrent && previousDateKey && latestDateKey && previousDateKey === latestDateKey && sameSegmentShape) {
@@ -615,6 +615,8 @@ export function DashboardPage({ disableFetch = false, initialPayload }: Dashboar
         setMessage('Live');
         writeCache(DASHBOARD_CACHE_KEY, { dateKey: latestDateKey, payload: data, ts: now });
         return true;
+      } else if (silent) {
+        return false;
       } else if (cached?.payload) {
         setPayload(cached.payload);
         latestTradingDateRef.current = extractDashboardDateKey(cached.payload) ?? latestTradingDateRef.current;
@@ -628,7 +630,7 @@ export function DashboardPage({ disableFetch = false, initialPayload }: Dashboar
         return false;
       }
     } catch (error) {
-      if (error instanceof Error && /abort/i.test(error.message)) return false;
+      if (signal?.aborted || silent || (error instanceof Error && /abort/i.test(error.message))) return false;
       const cached = readFreshDashboardCache();
       if (cached?.payload) {
         setPayload(cached.payload);
@@ -648,49 +650,51 @@ export function DashboardPage({ disableFetch = false, initialPayload }: Dashboar
 
   const loadTicker = useCallback(async (forceRefresh = false, signal?: AbortSignal) => {
     const cached = readFreshTickerCache();
-    if (!forceRefresh && cached?.moversPayload) {
-      setTickerPayload(cached.moversPayload);
-      return;
-    }
     try {
       const moversData = await fetchDashboardMovers<unknown>(
-        { limit: TICKER_SOURCE_LIMIT, segment: 'nifty500', ...(forceRefresh ? { refresh: 1 } : {}) },
+        { limit: TICKER_SOURCE_LIMIT, segment: 'nifty500', ...(forceRefresh ? { refresh: 1 } : { checkLatest: 1 }) },
         { signal },
       );
+      if (signal?.aborted) return;
+      const dateKey = extractDashboardDateKey(moversData);
+      const previousDateKey = extractDashboardDateKey(readFreshTickerCache()?.moversPayload);
+      if (previousDateKey && (!dateKey || dateKey < previousDateKey || (!forceRefresh && dateKey === previousDateKey))) return;
       setTickerPayload(moversData ?? null);
       if (moversData) {
-        writeCache(TICKER_CACHE_KEY, { dateKey: extractDashboardDateKey(moversData), moversPayload: moversData, ts: Date.now() });
+        writeCache(TICKER_CACHE_KEY, { dateKey, moversPayload: moversData, ts: Date.now() });
       }
     } catch (error) {
-      if (error instanceof Error && /abort/i.test(error.message)) return;
-      setTickerPayload(cached?.moversPayload ?? null);
+      if (signal?.aborted || !forceRefresh || (error instanceof Error && /abort/i.test(error.message))) return;
+      setTickerPayload((current: unknown) => current ?? cached?.moversPayload ?? null);
     }
   }, []);
 
   useEffect(() => {
     if (disableFetch) return undefined;
     const controller = new AbortController();
-    void loadDashboard(false, controller.signal);
-    void loadTicker(false, controller.signal);
     let pollInFlight = false;
-    const pollId = window.setInterval(() => {
+    const poll = () => {
       if (document.visibilityState && document.visibilityState !== 'visible') return;
       if (pollInFlight) return;
       pollInFlight = true;
       void (async () => {
         try {
-          const dashboardChanged = await loadDashboard(false, undefined, { silent: true });
-          if (dashboardChanged) {
-            await loadTicker(false);
-          }
+          await Promise.all([
+            loadDashboard(false, controller.signal, { silent: latestTradingDateRef.current !== null }),
+            loadTicker(false, controller.signal),
+          ]);
         } finally {
           pollInFlight = false;
         }
       })();
-    }, AUTO_POLL_INTERVAL_MS);
+    };
+    poll();
+    const pollId = window.setInterval(poll, AUTO_POLL_INTERVAL_MS);
+    document.addEventListener('visibilitychange', poll);
     return () => {
       controller.abort();
       window.clearInterval(pollId);
+      document.removeEventListener('visibilitychange', poll);
     };
   }, [disableFetch, loadDashboard, loadTicker]);
 

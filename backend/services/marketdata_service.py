@@ -96,6 +96,7 @@ STOCK_EOD_CURRENT_DAY_ELIGIBLE_HOUR = min(
 )
 DEFAULT_FYERS_PROJECT_DIR = r"D:\fyers_api_integration"
 FYERS_PROJECT_DIR = os.getenv("FYERS_PROJECT_DIR", DEFAULT_FYERS_PROJECT_DIR).strip() or DEFAULT_FYERS_PROJECT_DIR
+FYERS_SDK_LOG_DIR = _env_str("FYERS_SDK_LOG_DIR", str(_REPO_ROOT / "runtime" / "logs" / "fyers"))
 FYERS_PYTHON_EXE = os.getenv("FYERS_PYTHON_EXE", "").strip()
 FYERS_LOG_TAIL_LINES = _env_int("FYERS_LOG_TAIL_LINES", 80)
 FYERS_AUTH_TIMEOUT_SEC = _env_int("FYERS_AUTH_TIMEOUT_SEC", 600)
@@ -1565,6 +1566,9 @@ def merge_latest():
             cur.callproc(SYNC_PROC)
             output = _read_dbms_output(cur)
             summary = _parse_sync_output(output)
+            # The procedure commits. Reconcile and validate against one snapshot so
+            # later FYERS commits remain pending for the next merge cycle.
+            cur.execute("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE")
             try:
                 cur.execute(
                     "SELECT last_load_ts FROM STOCK_SYNC_CTRL WHERE target = :target",
@@ -1814,7 +1818,15 @@ def _load_external_fyers_modules(project_dir: Path) -> tuple[Any, Any, Any]:
         sys.path.insert(0, project_token)
     try:
         from src.config import load_config as external_load_config  # type: ignore
-        from src.fyers_client import FyersHistoryClient as external_history_client  # type: ignore
+        from src import fyers_client as external_client_module  # type: ignore
+        # The integration package can live outside our writable workspace.
+        # Set its SDK log destination before constructing any profile/history client.
+        sdk_log_dir = Path(FYERS_SDK_LOG_DIR).expanduser()
+        if not sdk_log_dir.is_absolute():
+            sdk_log_dir = _REPO_ROOT / sdk_log_dir
+        sdk_log_dir.mkdir(parents=True, exist_ok=True)
+        external_client_module.LOG_DIR = sdk_log_dir
+        external_history_client = external_client_module.FyersHistoryClient
         from src import db as external_db  # type: ignore
     except Exception as exc:
         raise RuntimeError(f"Unable to load FYERS direct API modules from {project_dir}: {exc}") from exc
@@ -2097,32 +2109,8 @@ WHEN NOT MATCHED THEN INSERT (
 
 
 def _load_fyers_batch_symbols(project_dir: Path) -> list[str]:
-    cfg = _load_fyers_direct_config(project_dir)
-    symbols_csv = str(cfg.get("SYMBOLS_CSV") or "").strip()
-    if not symbols_csv:
-        raise ValueError("SYMBOLS_CSV is not configured in the FYERS project.")
-    symbols_path = Path(symbols_csv)
-    if not symbols_path.is_absolute():
-        symbols_path = project_dir / symbols_path
-    if not symbols_path.exists():
-        csv_candidate = symbols_path.with_suffix(".csv") if not symbols_path.suffix else None
-        if csv_candidate is not None and csv_candidate.exists():
-            symbols_path = csv_candidate
-        else:
-            raise ValueError(f"FYERS symbols CSV not found: {symbols_path}")
-    df = pd.read_csv(symbols_path, dtype=str)
-    if df.empty:
-        return []
-    symbol_column = next((col for col in df.columns if str(col).strip().lower() == "symbol"), df.columns[0])
-    symbols: list[str] = []
-    seen: set[str] = set()
-    for value in df[symbol_column].tolist():
-        token = str(value or "").strip().upper()
-        if not token or token in seen:
-            continue
-        seen.add(token)
-        symbols.append(token)
-    return symbols
+    from .common_symbols_service import load_common_symbols
+    return load_common_symbols(fyers=True)
 
 
 def _date_range_has_weekday(start_date: dt.date, end_date: dt.date) -> bool:
@@ -2592,7 +2580,14 @@ def _normalize_symbols_payload(
     line_logger: Optional[Callable[[str], None]] = None,
 ) -> list[dict[str, Any]]:
     tokens = _split_symbol_input_tokens(symbol_input)
+    from .common_symbols_service import load_common_symbols
+    from .nse_symbol_normalization import canonical_nse_symbol
+    allowed = set(load_common_symbols())
+    if any(canonical_nse_symbol(token) not in allowed for token in tokens):
+        raise ValueError("Requested symbols must belong to NSE_SYMBOLS_COMMON_DATA.")
     normalized_rows = _resolve_fyers_symbol_rows(tokens, line_logger=line_logger)
+    if any(canonical_nse_symbol(row.get("normalized_symbol")) not in allowed for row in normalized_rows):
+        raise ValueError("Resolved symbols must belong to NSE_SYMBOLS_COMMON_DATA.")
     if not normalized_rows:
         raise ValueError("Stock name is required.")
     return normalized_rows
@@ -5946,6 +5941,7 @@ def _probe_fyers_profile_auth(project_dir: Path) -> tuple[bool, dict[str, Any]]:
                 "authFailure": _is_fyers_auth_failure(f"{code} {message}"),
             }
         except Exception as exc:
+            _logger.warning("[FYERS][AUTH_PROFILE] validation failed error_type=%s", type(exc).__name__)
             message = str(exc)
             result["details"] = {
                 "status": "error",

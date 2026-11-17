@@ -72,7 +72,7 @@ _UNIVERSE_RE = re.compile(r'FFMC symbol universe path=(?P<path>.+?) count=(?P<to
 
 
 def _symbol_source_details() -> Tuple[str, int]:
-  path = str(nifty500_svc.resolve_existing_csv_path())
+  path = nifty500_svc.SOURCE_TABLE
   try:
     symbols = nifty500_svc.load_existing_symbols(require_file=True)
     count = len([item for item in symbols if str(item or '').strip()])
@@ -113,7 +113,7 @@ def _supporting_file(payload: Dict[str, Any], line_logger: Optional[Callable[[st
   if line_logger:
     line_logger(mcap._flow_marker('download', 'Loading FFMC symbol universe.'))
   trade_dates, eq_only, enrich_limit, symbols, allowed_symbols = _parse_payload(payload, line_logger=line_logger)
-  symbols_path = str(nifty500_svc.resolve_existing_csv_path())
+  symbols_path = nifty500_svc.SOURCE_TABLE
   try:
     if allowed_symbols is None:
       allowed_symbols = nifty500_svc.load_existing_symbols(require_file=True)

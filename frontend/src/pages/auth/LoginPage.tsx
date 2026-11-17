@@ -154,7 +154,7 @@ export function LoginPage() {
   }
 
   return (
-    <AuthShell eyebrow="Secure Access" title="CvingTrade25X">
+    <AuthShell eyebrow="Secure Access" title="CvingTrade25X" hideScrollbar>
       <div className="mb-6">
         <h2 className="text-3xl font-black text-slate-950 dark:text-slate-100">Welcome Back</h2>
         <p className="mt-2 text-sm font-semibold leading-6 text-slate-500 dark:text-slate-400">

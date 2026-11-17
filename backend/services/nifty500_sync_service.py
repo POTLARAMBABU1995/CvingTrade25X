@@ -12,7 +12,15 @@ from typing import Any
 from openpyxl import load_workbook
 import xlrd
 
+from services.common_symbols_service import SOURCE_TABLE, load_common_symbols
 from services.nse_symbol_normalization import canonical_nse_symbol, format_fyers_nse_symbol
+
+try:
+    from ..env_bootstrap import load_default_env
+except ImportError:  # Standalone runners import services as a top-level package.
+    from env_bootstrap import load_default_env
+
+load_default_env()
 
 
 DEFAULT_FYERS_NIFTY500_EXISTING_CSV = r"D:\fyers_api_integration\data\symbols_nifty500.csv"
@@ -229,10 +237,8 @@ def _resolve_uploaded_symbols(payload: dict[str, Any]) -> tuple[list[str], str]:
 
 
 def load_existing_symbols(*, require_file: bool = False) -> list[str]:
-    path = _resolve_existing_csv_path()
-    if require_file and not path.exists():
-        raise FileNotFoundError(f"NIFTY500 universe file is missing: {path}")
-    return _read_symbols_from_path(path)
+    # Kept for existing consumers; require_file no longer selects a CSV source.
+    return load_common_symbols()
 
 
 def _summarize_symbols(symbols: list[str]) -> tuple[list[dict[str, Any]], dict[str, int]]:
@@ -386,159 +392,29 @@ def _write_existing_symbols(path: Path, symbols: list[str]) -> None:
 
 
 def get_nifty500_sync_snapshot() -> dict[str, Any]:
-    path = _resolve_existing_csv_path()
-    existing_symbols = _read_symbols_from_path(path)
-    message = "Existing FYERS NIFTY500 file loaded." if path.exists() else "Existing FYERS NIFTY500 file is missing."
-    return _build_payload(existing_path=path, existing_symbols=existing_symbols, message=message)
+    payload = _build_payload(existing_path=Path(SOURCE_TABLE), existing_symbols=load_existing_symbols(),
+                             message="Common symbol table loaded (read-only).")
+    payload["existing"].update(path=SOURCE_TABLE, exists=True)
+    payload["summary"]["requiresCreate"] = False
+    payload.update(source=SOURCE_TABLE, readOnly=True)
+    return payload
 
 
 def compare_nifty500_sync(payload: dict[str, Any]) -> dict[str, Any]:
-    new_symbols, filename = _require_uploaded_symbols(payload)
-    path = _resolve_existing_csv_path()
-    existing_symbols = _read_symbols_from_path(path)
-    if not new_symbols:
-        raise ValueError("No symbols were found in the uploaded file. Ensure the file contains a symbol column.")
-    return _build_payload(
-        existing_path=path,
-        existing_symbols=existing_symbols,
-        new_symbols=new_symbols,
-        filename=filename,
-        message="NIFTY500 compare completed.",
-    )
+    raise ValueError("NIFTY500 Sync is read-only. Symbols are managed in NSE_SYMBOLS_COMMON_DATA.")
 
 
 def merge_missing_nifty500_symbols(payload: dict[str, Any]) -> dict[str, Any]:
-    new_symbols, filename = _require_uploaded_symbols(payload)
-    path = _resolve_existing_csv_path()
-    if not new_symbols:
-        raise ValueError("No symbols were found in the uploaded file. Ensure the file contains a symbol column.")
-
-    with _WRITE_LOCK:
-        existing_symbols = _read_symbols_from_path(path)
-        existing_set = set(existing_symbols)
-        new_rows_base, _ = _summarize_symbols(new_symbols)
-        merged_symbols = [row["symbol"] for row in new_rows_base if row["symbol"] not in existing_set]
-        merged_count = len(merged_symbols)
-        if merged_symbols:
-            updated_symbols = [*existing_symbols, *merged_symbols]
-            _write_existing_symbols(path, updated_symbols)
-            existing_symbols = updated_symbols
-
-    message = (
-        f"Merged {merged_count} missing symbol{'s' if merged_count != 1 else ''} into the existing FYERS CSV."
-        if merged_count
-        else "No new symbols were missing from the existing FYERS CSV."
-    )
-    return _build_payload(
-        existing_path=path,
-        existing_symbols=existing_symbols,
-        new_symbols=new_symbols,
-        filename=filename,
-        message=message,
-        merged_count=merged_count,
-    )
+    raise ValueError("NIFTY500 Sync is read-only. Symbols are managed in NSE_SYMBOLS_COMMON_DATA.")
 
 
 def add_nifty500_symbol(payload: dict[str, Any]) -> dict[str, Any]:
-    normalized_symbols = _extract_symbols_from_payload(payload)
-    if not normalized_symbols:
-        path = _resolve_existing_csv_path()
-        existing_symbols = _read_symbols_from_path(path)
-        return _build_payload(
-            existing_path=path,
-            existing_symbols=existing_symbols,
-            message="No valid symbols to add. Blocked/invalid symbols were skipped.",
-        )
-
-    path = _resolve_existing_csv_path()
-    with _WRITE_LOCK:
-        existing_symbols = _read_symbols_from_path(path)
-        existing_set = set(existing_symbols)
-        added_symbols: list[str] = []
-        for symbol in normalized_symbols:
-            if symbol in existing_set:
-                continue
-            existing_set.add(symbol)
-            existing_symbols.append(symbol)
-            added_symbols.append(symbol)
-        if added_symbols:
-            _write_existing_symbols(path, existing_symbols)
-
-    requested_count = len(normalized_symbols)
-    added_count = len(added_symbols)
-    skipped_count = max(requested_count - added_count, 0)
-    if requested_count == 1:
-        message = f"Symbol {normalized_symbols[0]} is available in the existing FYERS CSV."
-    else:
-        message = (
-            f"Processed {requested_count} symbols. Added {added_count} new symbol"
-            f"{'s' if added_count != 1 else ''}, skipped {skipped_count} existing."
-        )
-
-    return _build_payload(
-        existing_path=path,
-        existing_symbols=existing_symbols,
-        message=message,
-    )
+    raise ValueError("NIFTY500 Sync is read-only. Symbols are managed in NSE_SYMBOLS_COMMON_DATA.")
 
 
 def update_nifty500_symbol(payload: dict[str, Any]) -> dict[str, Any]:
-    original_symbol = _normalize_symbol(payload.get("originalSymbol"))
-    updated_symbol = _normalize_symbol(
-        payload.get("symbol")
-        or payload.get("updatedSymbol")
-        or payload.get("updated_symbol")
-    )
-    if not original_symbol:
-        raise ValueError("Original symbol is required.")
-    if not updated_symbol:
-        raise ValueError("Updated symbol is required.")
-
-    path = _resolve_existing_csv_path()
-    with _WRITE_LOCK:
-        existing_symbols = _read_symbols_from_path(path)
-        existing_set = set(existing_symbols)
-        if original_symbol not in existing_set:
-            raise ValueError(f"Symbol {original_symbol} was not found in the existing FYERS CSV.")
-        if updated_symbol != original_symbol and updated_symbol in existing_set:
-            raise ValueError(f"Symbol {updated_symbol} is already available in the existing FYERS CSV.")
-        rewritten = _dedupe_symbols([updated_symbol if symbol == original_symbol else symbol for symbol in existing_symbols])
-        _write_existing_symbols(path, rewritten)
-
-    return _build_payload(
-        existing_path=path,
-        existing_symbols=rewritten,
-        message=f"Updated {original_symbol} to {updated_symbol} in the existing FYERS CSV.",
-    )
+    raise ValueError("NIFTY500 Sync is read-only. Symbols are managed in NSE_SYMBOLS_COMMON_DATA.")
 
 
 def delete_nifty500_symbol(payload: dict[str, Any]) -> dict[str, Any]:
-    normalized = _normalize_symbol(payload.get("symbol"))
-    if not normalized:
-        raise ValueError("Symbol is required.")
-
-    path = _resolve_existing_csv_path()
-    with _WRITE_LOCK:
-        existing_symbols = _read_symbols_from_path(path)
-        if normalized not in set(existing_symbols):
-            return {
-                **_build_payload(
-                    existing_path=path,
-                    existing_symbols=existing_symbols,
-                    message=f"Symbol {normalized} was already absent from the existing FYERS CSV.",
-                ),
-                "deleted": False,
-                "symbol": normalized,
-            }
-        rewritten = [symbol for symbol in existing_symbols if symbol != normalized]
-        _write_existing_symbols(path, rewritten)
-
-    return {
-        **_build_payload(
-            existing_path=path,
-            existing_symbols=rewritten,
-            message=f"Deleted {normalized} from the existing FYERS CSV.",
-        ),
-        "deleted": True,
-        "symbol": normalized,
-    }
+    raise ValueError("NIFTY500 Sync is read-only. Symbols are managed in NSE_SYMBOLS_COMMON_DATA.")

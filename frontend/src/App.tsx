@@ -32,6 +32,7 @@ import { FyersHoldingsPage } from './pages/fyers/FyersHoldingsPage';
 import { Nifty500SyncPage } from './pages/fyers/Nifty500SyncPage';
 import {
   findSectorPageByPath,
+  SECTOR_DIRECTORY_PAGE,
 } from './data/sectorNav';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
@@ -322,7 +323,8 @@ function renderPhase4Page(pathname: string) {
     case '/sector/overview':
     case '/sector-overview':
       return <SectorOverviewPage />;
-    case '/app/sector/stocks':
+    case SECTOR_DIRECTORY_PAGE:
+      return <SectorWiseStocksPage />;
     case '/sector/stocks':
     case '/sector-wise-stocks':
     case '/sector-wise':

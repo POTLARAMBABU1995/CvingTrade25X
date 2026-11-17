@@ -38,9 +38,17 @@ function parseIsoDate(value: string): Date | null {
   return parsed;
 }
 
-export function formatFyersDateTime(value: unknown, fallback = '-') {
+export function formatFyersDateTime(value: unknown, fallback = '-', timeZone?: string) {
   const parsed = parseIsoDateTime(value);
   if (!parsed) return fallback;
+  if (timeZone) {
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone, day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: true,
+    }).formatToParts(parsed);
+    const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value || '';
+    return `${part('day')}-${part('month')}-${part('year')} ${part('hour')}:${part('minute')} ${part('dayPeriod').toUpperCase()}`;
+  }
   const hours24 = parsed.getHours();
   const hours12 = hours24 % 12 || 12;
   const suffix = hours24 >= 12 ? 'PM' : 'AM';
@@ -51,18 +59,19 @@ export function buildFyersAuthStatusMessage(payload: unknown, fallback = 'Author
   const source = asRecord(payload);
   const message = safeLegacyText(pickField(source, ['message'], ''), '').trim();
   if (pickField(source, ['authenticated'], false) === true) {
-    const parts = [message || fallback];
-    const statusSource = safeLegacyText(pickField(source, ['source', 'statusSource']), '').trim();
-    const verifiedAt = formatFyersDateTime(pickField(source, ['verifiedAt', 'verified_at', 'lastAuthorizedAt']), '');
-    const expiresAt = formatFyersDateTime(pickField(source, ['expiresAt', 'expires_at']), '');
-    const remainingMinutes = Number(pickField(source, ['remainingValidityMinutes', 'remaining_validity_minutes'], 0));
-    if (statusSource) parts.push(`Source: ${statusSource}`);
-    if (verifiedAt) parts.push(`Verified: ${verifiedAt}`);
-    if (expiresAt) parts.push(`Expires: ${expiresAt}`);
-    if (Number.isFinite(remainingMinutes) && remainingMinutes > 0) {
-      parts.push(`${remainingMinutes.toLocaleString('en-IN')} mins left`);
+    // This is the requested daily UI cutoff, separate from the provider token expiry.
+    for (const key of ['lastAuthorizedAt', 'lastAuthorizedDate', 'authDate', 'issuedAt', 'issuedAtUtc', 'verifiedAt', 'verified_at']) {
+      const value = safeLegacyText(source[key], '').trim();
+      if (!value) continue;
+      let authDate = '';
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        if (parseIsoDate(value)) authDate = value.split('-').reverse().join('-');
+      } else {
+        authDate = formatFyersDateTime(value, '', 'Asia/Kolkata').split(' ')[0];
+      }
+      if (authDate) return `Authentication valid until: ${authDate} 11:59 PM IST`;
     }
-    return parts.join(' | ');
+    return 'FYERS authenticated. Authentication date unavailable.';
   }
   if (message) return message;
   return fallback;

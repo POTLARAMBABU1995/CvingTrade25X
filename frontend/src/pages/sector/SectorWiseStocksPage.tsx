@@ -1029,9 +1029,9 @@ export function SectorWiseStocksPage({
       return sectorOptions.find((item) => item.code === preferredCode)
         ?? (requestedDynamicSectorCode
           ? undefined
-          : sectorOptions.find((item) => item.code === 'AUTO') ?? sectorOptions[0]);
+          : sectorOptions[0]);
     }
-    if (!sectorPage) return undefined;
+    if (!sectorPage) return sectorOptions[0];
     return sectorPageItems.find((item) => item.code === sectorPage.code) ?? sectorPage;
   }, [dynamicMode, requestedDynamicSectorCode, sectorOptions, sectorPage]);
 

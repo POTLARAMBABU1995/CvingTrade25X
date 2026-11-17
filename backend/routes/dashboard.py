@@ -2,6 +2,7 @@
 
 import os
 import time
+from datetime import date, datetime
 from typing import Any, Dict
 from threading import Lock
 
@@ -9,6 +10,7 @@ from flask import Blueprint, jsonify, request, current_app
 from .request_validators import parse_int
 
 from cache import TTLCache, background_refresh, load_json_snapshot, save_json_snapshot
+from db import fetch_latest_trade_date_from_oracle
 from services.dashboard_service import (
     AVAILABLE_SEGMENTS,
     DEFAULT_SEGMENT,
@@ -156,6 +158,26 @@ def _payload_matches_latest_date(payload: Dict[str, Any] | None, latest_trading_
     return str(payload.get('tradingDate') or '').strip() == latest_trading_date
 
 
+def _dev_date_has_advanced(payload: Dict[str, Any]) -> bool:
+    try:
+        latest = fetch_latest_trade_date_from_oracle()
+    except Exception:
+        current_app.logger.warning('Dashboard DEV date check failed', exc_info=True)
+        return False
+    if latest is None:
+        return False
+
+    trading_date = str(payload.get('tradingDate') or '').strip()[:10]
+    try:
+        payload_date = date.fromisoformat(trading_date)
+    except ValueError:
+        try:
+            payload_date = datetime.strptime(trading_date, '%d-%m-%Y').date()
+        except ValueError:
+            return True
+    return payload_date < latest
+
+
 def _resolve_segment(raw: str | None) -> str:
     segment = (raw or DEFAULT_SEGMENT).strip().lower() or DEFAULT_SEGMENT
     if segment not in AVAILABLE_SEGMENTS:
@@ -245,6 +267,7 @@ def api_dashboard_movers():
         return jsonify({'status': 'error', 'message': str(exc)}), 400
 
     force_refresh = request.args.get('refresh') in ('1', 'true', 'yes')
+    check_latest = request.args.get('checkLatest') == '1'
     key = _cache_key(segment, limit)
     snapshot_path = _snapshot_path_for(segment, limit)
     cached = _cache.get(key)
@@ -262,7 +285,7 @@ def api_dashboard_movers():
     request_id = getattr(request, 'request_id', '') or request.headers.get('X-Request-ID', '')
     snapshot = None
     if cached is not None and _breadth_payload_is_current(cached):
-        if force_refresh:
+        if force_refresh or (check_latest and _dev_date_has_advanced(cached)):
             _schedule_background_refresh(segment, limit, key)
             current_app.logger.info(
                 'api_dashboard_movers request_id=%s endpoint=/api/dashboard/movers segment=%s limit=%s trading_date=%s gainers=%s losers=%s duration_ms=%s fallback_used=true source=cache_refreshing_fast_path',
@@ -294,6 +317,9 @@ def api_dashboard_movers():
         if snapshot and _payload_has_dashboard_data(snapshot):
             payload = _hydrate_movers_payload(dict(snapshot), enrich_marketcap=False)
             _cache.set(key, dict(payload))
+            if check_latest and _dev_date_has_advanced(payload):
+                _schedule_background_refresh(segment, limit, key)
+                return jsonify({**payload, 'cached': True, 'refreshing': True})
             current_app.logger.info(
                 'api_dashboard_movers request_id=%s endpoint=/api/dashboard/movers segment=%s limit=%s trading_date=%s gainers=%s losers=%s duration_ms=%s fallback_used=true source=snapshot_fast_path',
                 request_id,
